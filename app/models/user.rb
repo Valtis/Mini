@@ -9,7 +9,7 @@ class User < ActiveRecord::Base
   validate :status_has_valid_range
 
   def password_contains_capital_letter_and_number
-    if not password =~ /[A-Z]/ and not password =~ /[0-9]/
+    if not password =~ /[A-Z]/ or not password =~ /[0-9]/
       errors.add(:password, 'must contain at least one capital letter and a number')
     end
   end
@@ -21,8 +21,8 @@ class User < ActiveRecord::Base
   end
 
   def status_has_valid_range
-    if status < 0 or status > 3
-      error(:status, 'has invalid value')
+    if !status or status < 0 or status > 3
+      errors.add(:status, 'has invalid value')
     end
   end
 
