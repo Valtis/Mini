@@ -6,3 +6,10 @@ script:
 - RAILS_ENV=test bundle exec rake db:migrate --trace
 - bundle exec rake db:test:prepare
 - bundle exec rspec -fd spec/
+deploy:
+  provider: heroku
+  api_key:
+    secure: PYW89CWAJOkDu2qpXcc21xXcrRX1F2oqLyg/A+VF0S7EsrmJVMyVfb/i/54s1SkuadEqYmHLrrRBfkBAffkxSVf71945IR6s430sm+pjemLGRXzCEFUNzedxYC6yi6fkX3lrgS28CZ30SbTtf4sXia1xHrhP8SK9pjLx8WOjUpU=
+  app: sheltered-journey-9941
+  on:
+    repo: Valtis/Mini
