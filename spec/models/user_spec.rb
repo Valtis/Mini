@@ -61,4 +61,21 @@ RSpec.describe User, type: :model do
     expect(user).not_to be_valid
     expect(User.count).to eq(0)
   end
+
+  it 'has correct status after setting the status' do
+    user = User.create username:'TestUser', password:'Foo1', password_confirmation:'Foo1', status: 0
+    expect(user.user_status).to be(:normal)
+    user.set_status(:banned)
+    expect(user.user_status).to be(:banned)
+
+    user.set_status(:admin)
+    expect(user.user_status).to be(:admin)
+
+    user.set_status(:moderator)
+    expect(user.user_status).to be(:moderator)
+
+
+
+
+  end
 end
