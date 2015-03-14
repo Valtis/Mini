@@ -8,6 +8,6 @@ Alustava tarkoitus olisi tallentaa kuvat Amazonin palvelimille. Katsotaan projek
 ![UML](http://yuml.me/309dd55c.svg)
   
   
-Heroku: https://sheltered-journey-9941.herokuapp.com/ 
+Heroku: https://sheltered-journey-9941.herokuapp.com/users
 
 [![Build Status](https://travis-ci.org/Valtis/Mini.svg?branch=master)](https://travis-ci.org/Valtis/Mini)
