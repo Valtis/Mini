@@ -5,9 +5,9 @@ Imgur-klooni: Käyttäjä voi ladata kuvia joko anonyymisti tai rekisteröitynee
 
 Alustava tarkoitus olisi tallentaa kuvat Amazonin palvelimille. Katsotaan projektin kuluessa tuleeko toteutettua.
 
-![UML](http://yuml.me/309dd5c.svg)
+![UML](http://yuml.me/309dd55c.svg)
   
-[![Build Status](https://travis-ci.org/Valtis/Mini.svg?branch=master)](https://travis-ci.org/Valtis/Mini)
   
 Heroku: https://sheltered-journey-9941.herokuapp.com/ 
 
+[![Build Status](https://travis-ci.org/Valtis/Mini.svg?branch=master)](https://travis-ci.org/Valtis/Mini)
