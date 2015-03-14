@@ -50,6 +50,7 @@ end
 
 group :test do
   gem 'simplecov', require: false
+  gem 'factory_girl_rails'
   gem 'capybara'
   gem 'launchy'
 end

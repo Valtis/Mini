@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe User, type: :model do
   it 'is created successfully with appropriate username, password and status' do
-    user = User.create username:'TestUser', password:'TestPassword1', password_confirmation:'TestPassword1', status: 0
+    user = FactoryGirl.create :user
     expect(user).to be_valid
     expect(user.authenticate('TestPassword1')).to be(user)
     expect(User.count).to eq(1)
