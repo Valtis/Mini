@@ -32,6 +32,14 @@ RSpec.describe User, type: :model do
     expect(User.count).to eq(0)
   end
 
+
+  it 'is not created if username already exists' do
+    FactoryGirl.create :user
+    user = User.create username:'TestUser', password:'TestPassword1', password_confirmation:'TestPassword1', status: 0
+    expect(user).not_to be_valid
+    expect(User.count).to eq(1)
+  end
+
   it 'is not created when password fields do not match' do
     user = User.create username:'TestUser', password:'TestPassword1', password_confirmation:'SOmethingsomethinfg', status: 0
     expect(user).not_to be_valid
