@@ -7,6 +7,19 @@
   <%= csrf_meta_tags %>
 </head>
 <body>
+<nav>
+    <% if current_user %>
+        <span>
+          <%= link_to current_user.username, current_user %>
+        </span>
+        <%= link_to 'Log out', logout_path, method: :delete %>
+    <% else %>
+      <%= link_to 'Log in', new_sessions_path %>
+      <%= link_to 'Register', new_user_path %>
+    <% end %>
+    <span>Some</span>
+    <span>Placeholders</span>
+</nav>
 
 <%= yield %>
 
