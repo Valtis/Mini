@@ -25,6 +25,11 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 #pw hashing
 gem 'bcrypt', '~> 3.1.2'
 
+# File attachment library for images.
+gem 'paperclip', '~> 4.2'
+#amazon s3 gem
+gem 'aws-sdk', '< 2.0'
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'

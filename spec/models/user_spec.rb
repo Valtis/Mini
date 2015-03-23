@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe User, type: :model do
+
+
   it 'is created successfully with appropriate username, password and status' do
     user = FactoryGirl.create :user
     expect(user).to be_valid
@@ -81,9 +83,49 @@ RSpec.describe User, type: :model do
 
     user.set_status(:moderator)
     expect(user.user_status).to be(:moderator)
-
-
-
-
   end
+
+  it 'does not have moderator privileges set when status is normal' do
+    user = FactoryGirl.create :user, status: 0
+    expect(user.has_moderator_privileges).to be(false)
+  end
+
+  it 'does not have moderator privileges set when status is banned' do
+    user = FactoryGirl.create :user, status: 1
+    expect(user.has_moderator_privileges).to be(false)
+  end
+
+  it 'has moderator privileges set when status is moderator' do
+    user = FactoryGirl.create :user, status: 2
+
+    expect(user.has_moderator_privileges).to be(true)
+  end
+
+  it 'has moderator privileges set when status is admin' do
+    user = FactoryGirl.create :user, status: 3
+    expect(user.has_moderator_privileges).to be(true)
+  end
+
+  it 'does not have moderator privileges set when status is normal' do
+    user = FactoryGirl.create :user, status: 0
+    expect(user.has_admin_privileges).to be(false)
+  end
+
+  it 'does not have moderator privileges set when status is banned' do
+    user = FactoryGirl.create :user, status: 1
+    expect(user.has_admin_privileges).to be(false)
+  end
+
+  it 'has moderator privileges set when status is moderator' do
+    user = FactoryGirl.create :user, status: 2
+
+    expect(user.has_admin_privileges).to be(false)
+  end
+
+  it 'has moderator privileges set when status is admin' do
+    user = FactoryGirl.create :user, status: 3
+    expect(user.has_admin_privileges).to be(true)
+  end
+
+
 end

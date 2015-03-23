@@ -13,7 +13,6 @@
 .dat*
 .repl_history
 build/
-.apikey.secret
 ## Documentation cache and generated files:
 /.yardoc/
 /_yardoc/
@@ -35,4 +34,7 @@ build/
 /log/*
 !/log/.keep
 /tmp
-
+# no api keys for you
+.apikey.secret
+s3.json
+secret.sh

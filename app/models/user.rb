@@ -27,6 +27,15 @@ class User < ActiveRecord::Base
   end
 
 
+  def has_moderator_privileges
+    user_status == :moderator or user_status == :admin
+  end
+
+  def has_admin_privileges
+    user_status == :admin
+  end
+
+
   def set_status(status)
     case status
       when :normal

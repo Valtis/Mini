@@ -11,7 +11,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150314113432) do
+ActiveRecord::Schema.define(version: 20150323124236) do
+
+  create_table "images", force: :cascade do |t|
+    t.datetime "created_at",           null: false
+    t.datetime "updated_at",           null: false
+    t.string   "S3Image_file_name"
+    t.string   "S3Image_content_type"
+    t.integer  "S3Image_file_size"
+    t.datetime "S3Image_updated_at"
+    t.integer  "user_id"
+  end
 
   create_table "users", force: :cascade do |t|
     t.string   "username"
