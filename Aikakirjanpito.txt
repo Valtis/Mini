@@ -1,2 +1,2 @@
 15.3: Projektin aloittelua. Käyttäjät ja sessiot. n. 5h
-23.3: 
+23.3: AWS:n kanssa tappelua. Kuvien lataus, kuvat profiilisivulle. n. 5h 
