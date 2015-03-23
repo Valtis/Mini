@@ -12,14 +12,16 @@
   <tbody>
     <% @images.each do |image| %>
       <tr>
-        <td><%= link_to 'Show', image %></td>
-        <td><%= link_to 'Edit', edit_image_path(image) %></td>
-        <td><%= link_to 'Destroy', image, method: :delete, data: { confirm: 'Are you sure?',  } %></td>
+
+        <%= link_to "#{image_tag(image.S3Image.url(:medium))}".html_safe, image %>
       </tr>
+      <br/>
     <% end %>
   </tbody>
 </table>
 
 <br>
+
+
 
 <%= link_to 'New Image', new_image_path %>

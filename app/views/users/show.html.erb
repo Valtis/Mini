@@ -10,6 +10,14 @@
   <%= @user.user_status %>
 </p>
 
+<% unless @user.image.empty? %>
+<p><strong>User has uploaded the following images</strong></p>
+    <% @user.image.each do |image| %>
+        <%= link_to "#{image_tag(image.S3Image.url(:thumb))}".html_safe, image %>
+        <br/>
+    <% end %>
+
+<% end %>
 
 <%= link_to 'Edit', edit_user_path(@user) %> |
 <%= link_to 'Back', users_path %>

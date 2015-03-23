@@ -1,7 +1,22 @@
 <p id="notice"><%= notice %></p>
 
+<p><strong>Uploaded by: </strong>
+  <% if @image.user %>
+    <%= link_to "#{@image.user.username}", @image.user %>
+  <% else %>
+    Anonymous
+  <% end %>
+</p>
 
-<%= image_tag @image.S3Image.url(:medium) %>
 
-<%= link_to 'Edit', edit_image_path(@image) %> |
-<%= link_to 'Back', images_path %>
+<p><strong>Insert link to album if this belongs to one</strong></p>
+<p><strong>Insert visibility dropdown here if owner</strong></p>
+
+<% if image_owner_or_moderator?(@image) %>
+    <%= link_to 'Destroy', @image, method: :delete, data: { confirm: 'Are you sure?',  } %>
+    <br/>
+<% end %>
+
+
+<%= link_to "#{image_tag @image.S3Image.url(:medium)}".html_safe, @image.S3Image.url(:original) %>
+

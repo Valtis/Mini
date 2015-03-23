@@ -1,6 +1,6 @@
 class User < ActiveRecord::Base
   has_secure_password
-
+  has_many :image
 
   validates :username, uniqueness: true, length: { minimum: 3, maximum: 15 }
   validates :password, length: { minimum: 8 }
@@ -15,7 +15,7 @@ class User < ActiveRecord::Base
   end
 
   def password_does_not_contain_username
-    if password.downcase.include? username.downcase
+    if password == nil or password.downcase.include? username.downcase
       errors.add(:password, 'must not contain username')
     end
   end

@@ -1,6 +1,8 @@
 class ImagesController < ApplicationController
   before_action :set_image, only: [:show, :edit, :update, :destroy]
-  before_action :verify_owner_or_moderator, only: [:edit, :update, :destroy]
+  before_action only: [:edit, :update, :destroy] do
+    verify_image_owner_or_moderator(@image)
+  end
 
   # GET /images
   # GET /images.json
@@ -74,9 +76,4 @@ class ImagesController < ApplicationController
       params.require(:image).permit(:S3Image)
     end
 
-    def verify_owner_or_moderator
-      unless current_user and (@image.user == current_user or current_user.has_moderator_privileges)
-        redirect_to root_path, 'This operation is forbidden'
-      end
-    end
 end
