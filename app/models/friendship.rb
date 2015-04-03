@@ -8,6 +8,8 @@ class Friendship < ActiveRecord::Base
 
   #validates_uniqueness_of :friend_id, :scope => [:requester_id, :friend_id ]
 
+  validates_presence_of :requester
+  validates_presence_of :friend
   validate :friendship_does_not_exist
   validate :not_friend_with_self
 
@@ -27,6 +29,7 @@ class Friendship < ActiveRecord::Base
     # Thus, if we check friendship_for here, it always exists. Thus, we need to check that there are at most 1 friendship
     # (the one created inside the transaction we are currently validating for). If there are more, we had a pre-existing
     # friendship and need to bail out
+    return if requester.nil? or friend.nil?
     unless Friendship.friendships_between(requester, friend).count <= 1
       errors.add(:requester_id, 'This friendship already exists')
     end
