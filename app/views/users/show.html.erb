@@ -57,7 +57,7 @@
             <% end %>
         <% else %>
             <% if friendship.status == Friendship::Status::PENDING %>
-                <p>Link to cancelling pending request here</p>
+                <p><%= link_to 'Cancel pending request', reject_friendship_path(friendship_with_current_user(@user)), method: :delete %></p>
             <% else %>
                 <p><%= link_to 'Cancel friendship', reject_friendship_path(friendship_with_current_user(@user)), method: :delete %></p>
             <% end %>
