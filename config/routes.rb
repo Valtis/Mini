@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
-  resources :friendships, only: [:create, :delete ] do
+  resources :friendships, only: [:create] do
     post 'accept', on: :member, to: 'friendships#accept'
+    delete 'reject', on: :member, to: 'friendships#destroy'
   end
 
 

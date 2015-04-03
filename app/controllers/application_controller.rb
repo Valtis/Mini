@@ -3,7 +3,7 @@ class ApplicationController < ActionController::Base
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
 
-  helper_method :current_user, :image_owner_or_moderator?
+  helper_method :current_user, :image_owner_or_moderator?, :friendship_with_current_user
 
   def is_logged_in
     current_user != nil
@@ -20,6 +20,10 @@ class ApplicationController < ActionController::Base
 
   def verify_image_owner_or_moderator(image)
     redirect_to images_path, notice: 'This operation is forbidden' unless image_owner_or_moderator?(image)
+  end
+
+  def friendship_with_current_user(user)
+    Friendship.friendship_for(current_user, user)
   end
 
 end

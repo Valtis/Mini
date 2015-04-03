@@ -14,7 +14,12 @@
 <% unless @user.friends.empty? %>
     <p><strong>User has following friends</strong></p>
     <% @user.friends.each do |friend| %>
-    <p><%= link_to "#{friend.username}", friend %></p>
+    <p>
+      <%= link_to "#{friend.username}", friend %>
+      <% if current_user == @user %>
+          <%= link_to 'Cancel friendship', reject_friendship_path(friendship_with_current_user(friend)), method: :delete %>
+      <% end %>
+    </p>
     <% end %>
 <% end %>
 
@@ -44,7 +49,7 @@
     <% end %>
 <% else %>
     <% unless current_user.nil? %>
-        <% friendship = Friendship.friendship_for(current_user, @user) %>
+        <% friendship = friendship_with_current_user(@user) %>
         <% if friendship == nil %>
             <%= form_for(@friendship) do |f| %>
                 <%= f.hidden_field :friend_id %>

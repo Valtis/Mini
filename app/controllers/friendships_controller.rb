@@ -31,10 +31,7 @@ class FriendshipsController < ApplicationController
   # DELETE /friendships/1.json
   def destroy
     @friendship.destroy
-    respond_to do |format|
-      format.html { redirect_to friendships_url, notice: 'Friendship was successfully destroyed.' }
-      format.json { head :no_content }
-    end
+    redirect_to :back, notice: 'Friendship has been cancelled'
   end
 
   private
