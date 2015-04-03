@@ -10,6 +10,15 @@ class UsersController < ApplicationController
   # GET /users/1
   # GET /users/1.json
   def show
+    if current_user != @user
+      if @user.is_friend_with(current_user)
+        @friendship = Friendship.friendship_for(current_user, @user)
+      else
+        @friendship = Friendship.new
+        @friendship.friend = @user
+      end
+
+    end
   end
 
   # GET /users/new

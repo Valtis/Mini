@@ -1,55 +1,25 @@
 class FriendshipsController < ApplicationController
-  before_action :set_friendship, only: [:show, :edit, :update, :destroy]
-
-  # GET /friendships
-  # GET /friendships.json
-  def index
-    @friendships = Friendship.all
-  end
-
-  # GET /friendships/1
-  # GET /friendships/1.json
-  def show
-  end
-
-  # GET /friendships/new
-  def new
-    @friendship = Friendship.new
-  end
-
-  # GET /friendships/1/edit
-  def edit
-  end
+  before_action :set_friendship, only: [:destroy]
+  before_action :is_logged_in, only: [:create, :destroy]
+  before_action :is_participant_in_friendship, only: [:destroy]
 
   # POST /friendships
   # POST /friendships.json
   def create
+
     @friendship = Friendship.new(friendship_params)
+    @friendship.requester = current_user
+    @friendship.status = Friendship::Status::PENDING
 
     respond_to do |format|
       if @friendship.save
-        format.html { redirect_to @friendship, notice: 'Friendship was successfully created.' }
-        format.json { render :show, status: :created, location: @friendship }
+        format.html { redirect_to :back, notice: 'Friendship request was successfully created.' }
       else
-        format.html { render :new }
-        format.json { render json: @friendship.errors, status: :unprocessable_entity }
+        redirect :back, notice: 'Failed to create the friendship.'
       end
     end
   end
 
-  # PATCH/PUT /friendships/1
-  # PATCH/PUT /friendships/1.json
-  def update
-    respond_to do |format|
-      if @friendship.update(friendship_params)
-        format.html { redirect_to @friendship, notice: 'Friendship was successfully updated.' }
-        format.json { render :show, status: :ok, location: @friendship }
-      else
-        format.html { render :edit }
-        format.json { render json: @friendship.errors, status: :unprocessable_entity }
-      end
-    end
-  end
 
   # DELETE /friendships/1
   # DELETE /friendships/1.json
@@ -70,5 +40,11 @@ class FriendshipsController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def friendship_params
       params.require(:friendship).permit(:requesterId, :friendID, :status)
+    end
+
+    def is_participant_in_friendship
+      if @friendship.requester != current_user && @friendship.friend != current_user
+        redirect_to user_path, notice: 'Forbidden operation'
+      end
     end
 end

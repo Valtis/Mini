@@ -1,11 +1,13 @@
 Rails.application.routes.draw do
-  resources :friendships
+  resources :friendships, only: [:create, :delete ]
 
   resources :images
 
   resources :users
 
   resource :sessions, only: [:new, :create, :delete]
+
+
   delete 'logout', to: 'sessions#destroy'
   get 'root', to: 'users#index'
   get '/', to: 'users#index'

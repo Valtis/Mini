@@ -146,6 +146,19 @@ RSpec.describe User, type: :model do
       expect(@buddy.is_friend_with(@user)).to eq false
     end
 
+    it 'request cannot be created multiple times' do
+
+      request1 = Friendship.create requester: @user, friend: @buddy, status: Friendship::Status::PENDING
+
+      expect(request1).to be_valid
+
+      request2 = Friendship.create requester: @user, friend: @buddy, status: Friendship::Status::PENDING
+      expect(request2).not_to be_valid
+
+      request3 = Friendship.create requester: @buddy, friend: @user, status: Friendship::Status::PENDING
+      expect(request3).not_to be_valid
+    end
+
     it 'request increases pending sent and received counts but not friendship counts' do
       Friendship.create requester_id: @user.id, friend_id: @buddy.id, status: Friendship::Status::PENDING
 

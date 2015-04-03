@@ -5,6 +5,10 @@ class ApplicationController < ActionController::Base
 
   helper_method :current_user, :image_owner_or_moderator?
 
+  def is_logged_in
+    current_user != nil
+  end
+
   def current_user
     return nil if session[:user_id].nil?
     User.find(session[:user_id])

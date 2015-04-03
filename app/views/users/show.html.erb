@@ -10,13 +10,47 @@
   <%= @user.user_status %>
 </p>
 
+
+<% unless @user.friends.empty? %>
+    <p><strong>User has following friends</strong></p>
+    <% @user.friends.each do |friend| %>
+    <%= link_to "#{friend.username}", friend %>
+        <br/>
+    <% end %>
+<% end %>
+
+<% if current_user == @user %>
+    <!-- list friends -->
+
+
+    <!-- list outstanding friendship requests, if any-->
+    <% unless @user.pending_received_requests.empty? %>
+        <p><strong>You have outstanding friend requests</strong></p>
+        <% @user.pending_received_requests.each do |request| %>
+            <p>Request from <%= link_to "#{request.requester.username}", request.requester %></p>
+            <br/>
+        <% end %>
+    <% end %>
+<% else %>
+
+    <% if @user.is_friend_with(current_user) %>
+        <p><strong>Link to terminating friendship here</strong></p>
+    <% else %>
+        <%= form_for(@friendship) do |f| %>
+            <%= f.hidden_field :friend_id %>
+            <%= f.submit value: "Request friendship with #{@user.username}" %>
+        <% end %>
+
+    <% end %>
+<% end %>
+
+
 <% unless @user.image.empty? %>
-<p><strong>User has uploaded the following images</strong></p>
+    <p><strong>User has uploaded the following images</strong></p>
     <% @user.image.each do |image| %>
         <%= link_to "#{image_tag(image.S3Image.url(:thumb))}".html_safe, image %>
         <br/>
     <% end %>
-
 <% end %>
 
 <%= link_to 'Edit', edit_user_path(@user) %> |
