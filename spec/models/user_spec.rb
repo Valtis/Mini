@@ -132,12 +132,13 @@ RSpec.describe User, type: :model do
     before :each do
       @user = FactoryGirl.create :user
       @buddy = FactoryGirl.create :user, username: 'Foo'
+      @buddy2 = FactoryGirl.create :user, username: 'Foobar'
     end
 
     it 'does not exist for new users' do
       expect(@user.pending_sent_requests.count).to eq 0
       expect(@user.pending_received_requests.count).to eq 0
-      expect(@user.friends.count).to eq 0
+      expect(@user.friends.length).to eq 0
     end
 
     it 'is false for new users' do
@@ -150,11 +151,11 @@ RSpec.describe User, type: :model do
 
       expect(@user.pending_sent_requests.count).to eq 1
       expect(@user.pending_received_requests.count).to eq 0
-      expect(@user.friends.count).to eq 0
+      expect(@user.friends.length).to eq 0
 
       expect(@buddy.pending_sent_requests.count).to eq 0
       expect(@buddy.pending_received_requests.count).to eq 1
-      expect(@buddy.friends.count).to eq 0
+      expect(@buddy.friends.length).to eq 0
 
     end
 
@@ -168,14 +169,14 @@ RSpec.describe User, type: :model do
       Friendship.create requester_id: @user.id, friend_id: @user.id, status: Friendship::Status::PENDING
       expect(@user.pending_sent_requests.count).to eq 0
       expect(@user.pending_received_requests.count).to eq 0
-      expect(@user.friends.count).to eq 0
+      expect(@user.friends.length).to eq 0
     end
 
     it 'cannot be formed with self' do
       Friendship.create requester_id: @user.id, friend_id: @user.id, status: Friendship::Status::ACCEPTED
       expect(@user.pending_sent_requests.count).to eq 0
       expect(@user.pending_received_requests.count).to eq 0
-      expect(@user.friends.count).to eq 0
+      expect(@user.friends.length).to eq 0
     end
 
     it 'when accepted, increases friend count but not pending counts' do
@@ -183,11 +184,20 @@ RSpec.describe User, type: :model do
 
       expect(@user.pending_sent_requests.count).to eq 0
       expect(@user.pending_received_requests.count).to eq 0
-      expect(@user.friends.count).to eq 1
+      expect(@user.friends.length).to eq 1
 
       expect(@buddy.pending_sent_requests.count).to eq 0
       expect(@buddy.pending_received_requests.count).to eq 0
-      expect(@buddy.friends.count).to eq 1
+      expect(@buddy.friends.length).to eq 1
+    end
+
+    it 'when accepted, friends returns collection of friends' do
+      Friendship.create requester_id: @user.id, friend_id: @buddy.id, status: Friendship::Status::ACCEPTED
+      Friendship.create requester_id: @buddy2.id, friend_id: @user.id, status: Friendship::Status::ACCEPTED
+
+      expect(@user.friends.length).to eq 2
+      expect(@user.friends).to include(@buddy)
+      expect(@user.friends).to include(@buddy2)
     end
 
     it 'is true for friends' do

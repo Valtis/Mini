@@ -8,11 +8,23 @@ class User < ActiveRecord::Base
   has_many :friends_as_receiver, -> { where status: Friendship::Status::ACCEPTED }, class_name: 'Friendship', foreign_key: 'friend_id'
 
   def friends
-    friends_as_requester + friends_as_receiver
+    friendships = friends_as_requester + friends_as_receiver
+    friends = []
+    friendships.each do |f|
+        if f.requester == self
+          # if current user is the requester, add the friend to array
+          friends << (f.friend)
+        else
+          #otherwise, add the requester to array
+          friends << (f.requester)
+        end
+    end
+
+    friends
   end
 
   def is_friend_with(user)
-    friends.select{|friend| friend.requester_id == user.id or friend.friend_id == user.id }.count != 0
+    friends.include? user
   end
 
 
