@@ -7,16 +7,16 @@ class FriendshipsController < ApplicationController
   # POST /friendships.json
   def create
 
+
     @friendship = Friendship.new(friendship_params)
     @friendship.requester = current_user
     @friendship.status = Friendship::Status::PENDING
 
-    respond_to do |format|
-      if @friendship.save
-        format.html { redirect_to :back, notice: 'Friendship request was successfully created.' }
-      else
-        redirect :back, notice: 'Failed to create the friendship.'
-      end
+    byebug
+    if @friendship.save
+        redirect_to :back, notice: 'Friendship request was successfully created.'
+    else
+        redirect_to :back, notice: "Failed to create the friendship. Validation failure: #{@friendship.errors.messages.to_a.flatten * ' '}"
     end
   end
 
@@ -39,7 +39,7 @@ class FriendshipsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def friendship_params
-      params.require(:friendship).permit(:requesterId, :friendID, :status)
+      params.require(:friendship).permit(:requester_id, :friend_id, :status)
     end
 
     def is_participant_in_friendship

@@ -21,6 +21,9 @@ class Friendship < ActiveRecord::Base
 
 
   def self.friendship_for(user1, user2)
+    if user1.nil? or user2.nil?
+      return nil
+    end
     Friendship.friendships_between(user1, user2).first
   end
 

@@ -19,26 +19,41 @@
     <% end %>
 <% end %>
 
+
+
 <% if current_user == @user %>
     <!-- list friends -->
-
-
-    <!-- list outstanding friendship requests, if any-->
+    <!-- list outstanding received friendship requests, if any-->
     <% unless @user.pending_received_requests.empty? %>
-        <p><strong>You have outstanding friend requests</strong></p>
+        <p><strong>You have outstanding received friend requests</strong></p>
         <% @user.pending_received_requests.each do |request| %>
             <p>Request from <%= link_to "#{request.requester.username}", request.requester %></p>
             <br/>
         <% end %>
     <% end %>
-<% else %>
 
-    <% if @user.is_friend_with(current_user) %>
-        <p><strong>Link to terminating friendship here</strong></p>
-    <% else %>
-        <%= form_for(@friendship) do |f| %>
-            <%= f.hidden_field :friend_id %>
-            <%= f.submit value: "Request friendship with #{@user.username}" %>
+    <!-- list outstanding sent friendship requests, if any-->
+    <% unless @user.pending_sent_requests.empty? %>
+        <p><strong>You have outstanding sent friend requests</strong></p>
+        <% @user.pending_sent_requests.each do |request| %>
+            <p>Request to <%= link_to "#{request.friend.username}", request.friend %></p>
+            <br/>
+        <% end %>
+    <% end %>
+<% else %>
+    <% unless current_user.nil? %>
+        <% friendship = Friendship.friendship_for(current_user, @user) %>
+        <% if friendship == nil %>
+            <%= form_for(@friendship) do |f| %>
+                <%= f.hidden_field :friend_id %>
+                <%= f.submit value: "Request friendship with #{@user.username}" %>
+            <% end %>
+        <% else %>
+            <% if friendship.status == Friendship::Status::PENDING %>
+                <p>Link to cancelling pending request here</p>
+            <% else %>
+                <p>Link to cancel accepted request here</p>
+            <% end %>
         <% end %>
 
     <% end %>
