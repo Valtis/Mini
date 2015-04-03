@@ -164,6 +164,20 @@ RSpec.describe User, type: :model do
       expect(@buddy.is_friend_with(@user)).to eq false
     end
 
+    it 'cannot be requested with self' do
+      Friendship.create requester_id: @user.id, friend_id: @user.id, status: Friendship::Status::PENDING
+      expect(@user.pending_sent_requests.count).to eq 0
+      expect(@user.pending_received_requests.count).to eq 0
+      expect(@user.friends.count).to eq 0
+    end
+
+    it 'cannot be formed with self' do
+      Friendship.create requester_id: @user.id, friend_id: @user.id, status: Friendship::Status::ACCEPTED
+      expect(@user.pending_sent_requests.count).to eq 0
+      expect(@user.pending_received_requests.count).to eq 0
+      expect(@user.friends.count).to eq 0
+    end
+
     it 'when accepted, increases friend count but not pending counts' do
       Friendship.create requester_id: @user.id, friend_id: @buddy.id, status: Friendship::Status::ACCEPTED
 
@@ -182,6 +196,7 @@ RSpec.describe User, type: :model do
       expect(@user.is_friend_with(@buddy)).to eq true
       expect(@buddy.is_friend_with(@user)).to eq true
     end
+
   end
 
 
