@@ -1,7 +1,7 @@
 class FriendshipsController < ApplicationController
   before_action :set_friendship, only: [:accept, :destroy]
   before_action :is_logged_in, only: [:create, :destroy]
-  before_action :is_participant_in_friendship, only: [:destroy]
+  before_action :is_participant_in_friendship, only: [:destroy, :accept, :reject]
 
   # POST /friendships
   # POST /friendships.json
