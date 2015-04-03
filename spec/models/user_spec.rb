@@ -128,4 +128,61 @@ RSpec.describe User, type: :model do
   end
 
 
+  describe 'friendship' do
+    before :each do
+      @user = FactoryGirl.create :user
+      @buddy = FactoryGirl.create :user, username: 'Foo'
+    end
+
+    it 'does not exist for new users' do
+      expect(@user.pending_sent_requests.count).to eq 0
+      expect(@user.pending_received_requests.count).to eq 0
+      expect(@user.friends.count).to eq 0
+    end
+
+    it 'is false for new users' do
+      expect(@user.is_friend_with(@buddy)).to eq false
+      expect(@buddy.is_friend_with(@user)).to eq false
+    end
+
+    it 'request increases pending sent and received counts but not friendship counts' do
+      Friendship.create requester_id: @user.id, friend_id: @buddy.id, status: Friendship::Status::PENDING
+
+      expect(@user.pending_sent_requests.count).to eq 1
+      expect(@user.pending_received_requests.count).to eq 0
+      expect(@user.friends.count).to eq 0
+
+      expect(@buddy.pending_sent_requests.count).to eq 0
+      expect(@buddy.pending_received_requests.count).to eq 1
+      expect(@buddy.friends.count).to eq 0
+
+    end
+
+    it 'is false for pending requests' do
+      Friendship.create requester_id: @user.id, friend_id: @buddy.id, status: Friendship::Status::PENDING
+      expect(@user.is_friend_with(@buddy)).to eq false
+      expect(@buddy.is_friend_with(@user)).to eq false
+    end
+
+    it 'when accepted, increases friend count but not pending counts' do
+      Friendship.create requester_id: @user.id, friend_id: @buddy.id, status: Friendship::Status::ACCEPTED
+
+      expect(@user.pending_sent_requests.count).to eq 0
+      expect(@user.pending_received_requests.count).to eq 0
+      expect(@user.friends.count).to eq 1
+
+      expect(@buddy.pending_sent_requests.count).to eq 0
+      expect(@buddy.pending_received_requests.count).to eq 0
+      expect(@buddy.friends.count).to eq 1
+    end
+
+    it 'is true for friends' do
+      Friendship.create requester_id: @user.id, friend_id: @buddy.id, status: Friendship::Status::ACCEPTED
+
+      expect(@user.is_friend_with(@buddy)).to eq true
+      expect(@buddy.is_friend_with(@user)).to eq true
+    end
+  end
+
+
 end

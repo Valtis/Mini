@@ -1,8 +1,20 @@
 class User < ActiveRecord::Base
   has_secure_password
   has_many :image
+  has_many :pending_sent_requests, -> { where status: Friendship::Status::PENDING }, class_name: 'Friendship', foreign_key: 'requester_id'
+  has_many :pending_received_requests, -> { where status: Friendship::Status::PENDING }, class_name: 'Friendship', foreign_key: 'friend_id'
 
-  has_many :friendships
+  has_many :friends_as_requester, -> { where status: Friendship::Status::ACCEPTED }, class_name: 'Friendship', foreign_key: 'requester_id'
+  has_many :friends_as_receiver, -> { where status: Friendship::Status::ACCEPTED }, class_name: 'Friendship', foreign_key: 'friend_id'
+
+  def friends
+    friends_as_requester + friends_as_receiver
+  end
+
+  def is_friend_with(user)
+    friends.select{|friend| friend.requester_id == user.id or friend.friend_id == user.id }.count != 0
+  end
+
 
   validates :username, uniqueness: true, length: { minimum: 3, maximum: 15 }
   validates :password, length: { minimum: 8 }
