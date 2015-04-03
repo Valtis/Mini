@@ -2,11 +2,14 @@ class User < ActiveRecord::Base
   has_secure_password
   has_many :image
 
+  has_many :friendships
+
   validates :username, uniqueness: true, length: { minimum: 3, maximum: 15 }
   validates :password, length: { minimum: 8 }
   validate :password_contains_capital_letter_and_number
   validate :password_does_not_contain_username
   validate :status_has_valid_range
+
 
   def password_contains_capital_letter_and_number
     if not password =~ /[A-Z]/ or not password =~ /[0-9]/
