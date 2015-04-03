@@ -14,4 +14,9 @@ class Friendship < ActiveRecord::Base
     end
   end
 
+
+  def self.friendship_for(user1, user2)
+    Friendship.where('(requester_id = ? AND friend_id = ?) OR (requester_id = ? AND friend_id = ?)',
+      user1.id, user2.id, user2.id, user1.id).first
+  end
 end
