@@ -12,7 +12,6 @@ class FriendshipsController < ApplicationController
     @friendship.requester = current_user
     @friendship.status = Friendship::Status::PENDING
 
-    byebug
     if @friendship.save
         redirect_to :back, notice: 'Friendship request was successfully created.'
     else
@@ -24,7 +23,7 @@ class FriendshipsController < ApplicationController
   def accept
     @friendship.status = Friendship::Status::ACCEPTED
     @friendship.save
-    redirect :back
+    redirect_to :back
   end
 
   # DELETE /friendships/1
