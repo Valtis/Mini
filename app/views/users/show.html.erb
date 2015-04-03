@@ -43,7 +43,8 @@
     <% unless @user.pending_sent_requests.empty? %>
         <p><strong>You have outstanding sent friend requests</strong></p>
         <% @user.pending_sent_requests.each do |request| %>
-            <p>Request to <%= link_to "#{request.friend.username}", request.friend %></p>
+            <p>Request to <%= link_to "#{request.friend.username}", request.friend %>
+            <%= link_to 'Withdraw request', reject_friendship_path(request.id), method: :delete %></p>
             <br/>
         <% end %>
     <% end %>
