@@ -33,7 +33,7 @@
         <% @user.pending_received_requests.each do |request| %>
             <p>Request from <%= link_to "#{request.requester.username}", request.requester %>
             <%= link_to 'Accept friendship', accept_friendship_path(request.id), method: :post %>
-            <%= link_to 'Reject friendship', friendships_path(request.id), method: :delete %>
+            <%= link_to 'Reject friendship', reject_friendship_path(request.id), method: :delete %>
             </p>
             <br/>
         <% end %>
