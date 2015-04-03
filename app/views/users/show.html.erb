@@ -14,8 +14,7 @@
 <% unless @user.friends.empty? %>
     <p><strong>User has following friends</strong></p>
     <% @user.friends.each do |friend| %>
-    <%= link_to "#{friend.username}", friend %>
-        <br/>
+    <p><%= link_to "#{friend.username}", friend %></p>
     <% end %>
 <% end %>
 
@@ -27,7 +26,10 @@
     <% unless @user.pending_received_requests.empty? %>
         <p><strong>You have outstanding received friend requests</strong></p>
         <% @user.pending_received_requests.each do |request| %>
-            <p>Request from <%= link_to "#{request.requester.username}", request.requester %></p>
+            <p>Request from <%= link_to "#{request.requester.username}", request.requester %>
+            <%= link_to 'Accept friendship', accept_friendship_path(request.id), method: :post %>
+            <%= link_to 'Reject friendship', friendships_path(request.id), method: :delete %>
+            </p>
             <br/>
         <% end %>
     <% end %>

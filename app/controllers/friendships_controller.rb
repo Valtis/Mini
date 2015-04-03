@@ -1,5 +1,5 @@
 class FriendshipsController < ApplicationController
-  before_action :set_friendship, only: [:destroy]
+  before_action :set_friendship, only: [:accept, :destroy]
   before_action :is_logged_in, only: [:create, :destroy]
   before_action :is_participant_in_friendship, only: [:destroy]
 
@@ -20,6 +20,12 @@ class FriendshipsController < ApplicationController
     end
   end
 
+
+  def accept
+    @friendship.status = Friendship::Status::ACCEPTED
+    @friendship.save
+    redirect :back
+  end
 
   # DELETE /friendships/1
   # DELETE /friendships/1.json
