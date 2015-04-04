@@ -32,7 +32,7 @@ class UsersController < ApplicationController
   # POST /users.json
   def create
     @user = User.new(user_params)
-    @user.set_status(:normal)
+    @user.role = User::Role::NORMAL
 
     respond_to do |format|
       if @user.save

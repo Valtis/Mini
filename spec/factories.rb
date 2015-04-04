@@ -3,6 +3,6 @@ FactoryGirl.define do
     username 'TestUser'
     password 'TestPassword1'
     password_confirmation 'TestPassword1'
-    status 0
+    role User::Role::NORMAL
   end
 end

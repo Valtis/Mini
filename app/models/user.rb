@@ -1,11 +1,21 @@
 class User < ActiveRecord::Base
   has_secure_password
+
+  module Role
+    NORMAL = 0
+    BANNED = 1
+    MODERATOR = 2
+    ADMIN = 3
+  end
+
   has_many :image
   has_many :pending_sent_requests, -> { where status: Friendship::Status::PENDING }, class_name: 'Friendship', foreign_key: 'requester_id'
   has_many :pending_received_requests, -> { where status: Friendship::Status::PENDING }, class_name: 'Friendship', foreign_key: 'friend_id'
 
   has_many :friends_as_requester, -> { where status: Friendship::Status::ACCEPTED }, class_name: 'Friendship', foreign_key: 'requester_id'
   has_many :friends_as_receiver, -> { where status: Friendship::Status::ACCEPTED }, class_name: 'Friendship', foreign_key: 'friend_id'
+
+
 
   def friends
     friendships = friends_as_requester + friends_as_receiver
@@ -32,7 +42,7 @@ class User < ActiveRecord::Base
   validates :password, length: { minimum: 8 }
   validate :password_contains_capital_letter_and_number
   validate :password_does_not_contain_username
-  validate :status_has_valid_range
+  validate :role_has_valid_range
 
 
   def password_contains_capital_letter_and_number
@@ -47,51 +57,19 @@ class User < ActiveRecord::Base
     end
   end
 
-  def status_has_valid_range
-    if !status or status < 0 or status > 3
-      errors.add(:status, 'has invalid value')
+  def role_has_valid_range
+    if !role or role < 0 or role > 3
+      errors.add(:role, 'has invalid value')
     end
   end
 
 
   def has_moderator_privileges
-    user_status == :moderator or user_status == :admin
+    role == Role::MODERATOR or role == Role::ADMIN
   end
 
   def has_admin_privileges
-    user_status == :admin
+    role == Role::ADMIN
   end
-
-
-  def set_status(status)
-    case status
-      when :normal
-        self.status = 0
-      when :banned
-        self.status = 1
-      when :moderator
-        self.status = 2
-      when :admin
-        self.status = 3
-      else
-        throw 'Invalid user status code'
-    end
-  end
-
-  def user_status
-    case self.status
-      when 0
-        return :normal
-      when 1
-        return :banned
-      when 2
-        return :moderator
-      when 3
-        return :admin
-      else
-        throw 'Invalid user status, something went horribly wrong'
-    end
-  end
-
 
 end
