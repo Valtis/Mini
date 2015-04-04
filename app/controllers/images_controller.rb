@@ -1,9 +1,9 @@
 class ImagesController < ApplicationController
-  before_action :set_image, only: [:show, :edit, :update, :destroy]
+  before_action :set_image, only: [:show, :destroy]
   before_action  only: [:show] do
     redirect_to root_path unless has_right_to_see_image(@image)
   end
-  before_action only: [:edit, :update, :destroy] do
+  before_action only: [:destroy] do
     verify_image_owner_or_moderator(@image)
   end
 
@@ -23,15 +23,14 @@ class ImagesController < ApplicationController
     @image = Image.new
   end
 
-  # GET /images/1/edit
-  def edit
-  end
-
   # POST /images
   # POST /images.json
   def create
+
     @image = Image.new(image_params)
     @image.user = current_user
+
+
 
     respond_to do |format|
       if @image.save
