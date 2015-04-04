@@ -27,8 +27,8 @@ class ApplicationController < ActionController::Base
   end
 
   def has_right_to_see_image(image)
-    # if image is public, user is moderator/admin or user owns the image, then return true
-    return true if image.visibility == Image::Visibility::PUBLIC or
+    # if image is public, image is uploaded by anonymous user, user is moderator/admin or user owns the image, then return true
+    return true if image.visibility == Image::Visibility::PUBLIC or image.user.nil? or
         (current_user.nil? == false and (current_user.has_moderator_privileges or image.user == current_user))
 
     # if user is nil and we reach this point, image is not public so return false
