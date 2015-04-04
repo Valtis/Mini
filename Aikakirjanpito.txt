@@ -1,3 +1,4 @@
 15.3: Projektin aloittelua. Käyttäjät ja sessiot. n. 5h
 23.3: AWS:n kanssa tappelua. Kuvien lataus, kuvat profiilisivulle. n. 5h 
 3.4: Kaveruustoiminto. n. 5h
+4.4: Näkyvyys. n 2h.
