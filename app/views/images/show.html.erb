@@ -38,7 +38,17 @@
 <script type="application/javascript">
 
   $(document).ready(function() {
+      var selection = $("#visibilityselect");
+      var visibility = <%= @image.visibility %>;
 
+      if (visibility === <%= Image::Visibility::PUBLIC %>) {
+          visibility = "public"
+      } else if (visibility === <%= Image::Visibility::FRIENDS %>) {
+          visibility = "friends"
+      } else if (visibility === <%= Image::Visibility::PRIVATE %>) {
+          visibility = "private"
+      }
+      selection.val(visibility);
   });
 
   function setVisibility() {
