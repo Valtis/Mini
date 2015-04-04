@@ -50,6 +50,7 @@ class ImagesController < ApplicationController
 
     @image = Image.new(image_params)
     @image.user = current_user
+    @image.visibility = Image::Visibility::PUBLIC
 
     respond_to do |format|
       if @image.save
