@@ -1,5 +1,5 @@
 class ImagesController < ApplicationController
-  before_action :set_image, only: [:show, :destroy]
+  before_action :set_image, only: [:show, :destroy, :set_visibility]
   before_action  only: [:show] do
     redirect_to root_path unless has_right_to_see_image(@image)
   end
@@ -17,11 +17,31 @@ class ImagesController < ApplicationController
   # GET /images/1.json
   def show
 
+    @visibility = %w[private friends public]
   end
 
   # GET /images/new
   def new
     @image = Image.new
+  end
+
+  def set_visibility
+    redirect_to root_path unless current_user and @image.user == current_user
+    visibility = params[:visibility]
+    if  visibility == 'private'
+      @image.visibility = Image::Visibility::PRIVATE
+    elsif visibility == 'friends'
+      @image.visibility = Image::Visibility::FRIENDS
+    elsif visibility == 'public'
+      @image.visibility = Image::Visibility::PUBLIC
+    else
+      # probably some user getting bit too smart with their POSTs
+      redirect_to root_path
+    end
+
+    @image.save
+
+    redirect_to image_path(params[:id])
   end
 
   # POST /images
@@ -30,8 +50,6 @@ class ImagesController < ApplicationController
 
     @image = Image.new(image_params)
     @image.user = current_user
-
-
 
     respond_to do |format|
       if @image.save
