@@ -1,5 +1,12 @@
 class Image < ActiveRecord::Base
+  module Visibility
+    PRIVATE = 0
+    FRIENDS = 1
+    PUBLIC = 2
+  end
+
   belongs_to :user
+
   has_attached_file :S3Image, styles: {
                                thumb: '100x100>',
                                medium: '300x300>'
