@@ -12,6 +12,7 @@
 <p><strong>Insert link to album if this belongs to one</strong></p>
 <p><strong>Insert visibility dropdown here if owner</strong></p>
 
+
 <% if image_owner_or_moderator?(@image) %>
     <%= link_to 'Destroy', @image, method: :delete, data: { confirm: 'Are you sure?',  } %>
     <br/>

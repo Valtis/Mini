@@ -68,10 +68,12 @@
 <% end %>
 
 
+
+
 <% unless @user.image.empty? %>
     <p><strong>User has uploaded the following images</strong></p>
     <% @user.image.each do |image| %>
-        <%= link_to "#{image_tag(image.S3Image.url(:thumb))}".html_safe, image %>
+        <%= link_to "#{image_tag(image.S3Image.url(:thumb))}".html_safe, image if has_right_to_see_image(image) %>
         <br/>
     <% end %>
 <% end %>

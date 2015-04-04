@@ -1,5 +1,8 @@
 class ImagesController < ApplicationController
   before_action :set_image, only: [:show, :edit, :update, :destroy]
+  before_action  only: [:show] do
+    redirect_to root_path unless has_right_to_see_image(@image)
+  end
   before_action only: [:edit, :update, :destroy] do
     verify_image_owner_or_moderator(@image)
   end

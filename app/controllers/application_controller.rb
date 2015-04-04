@@ -3,7 +3,7 @@ class ApplicationController < ActionController::Base
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
 
-  helper_method :current_user, :image_owner_or_moderator?, :friendship_with_current_user
+  helper_method :current_user, :image_owner_or_moderator?, :friendship_with_current_user, :has_right_to_see_image
 
   def is_logged_in
     current_user != nil
@@ -24,6 +24,22 @@ class ApplicationController < ActionController::Base
 
   def friendship_with_current_user(user)
     Friendship.friendship_for(current_user, user)
+  end
+
+  def has_right_to_see_image(image)
+    # if image is public, user is moderator/admin or user owns the image, then return true
+    return true if image.visibility == Image::Visibility::PUBLIC or
+        (current_user.nil? == false and (current_user.has_moderator_privileges or image.user == current_user))
+
+    # if user is nil and we reach this point, image is not public so return false
+    return false if current_user.nil?
+
+    # if visibility set to friends only and user is a friend of the image owner, return true
+    return true if image.visibility == Image::Visibility::FRIENDS and current_user.is_friend_with(image.user)
+
+    # otherwise, no rights to see the image
+    false
+
   end
 
 end

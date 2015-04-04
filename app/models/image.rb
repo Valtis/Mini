@@ -13,5 +13,12 @@ class Image < ActiveRecord::Base
                            }
   validates_attachment_content_type :S3Image, :content_type => /\Aimage\/.*\Z/
 
+  validate :visibility_is_within_correct_range
+
+  def visibility_is_within_correct_range
+    if visibility.nil? or visibility < 0 or visibility > 2
+      errors.add(:visibility, 'has invalid value')
+    end
+  end
 
 end
