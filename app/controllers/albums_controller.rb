@@ -1,5 +1,8 @@
 class AlbumsController < ApplicationController
   before_action :set_album, only: [:show, :edit, :update, :destroy]
+  before_action  only: [:create, :new] do
+    redirect_to root_path unless logged_in?
+  end
 
   # GET /albums
   # GET /albums.json

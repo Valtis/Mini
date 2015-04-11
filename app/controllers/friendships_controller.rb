@@ -1,6 +1,9 @@
 class FriendshipsController < ApplicationController
   before_action :set_friendship, only: [:accept, :destroy]
-  before_action :is_logged_in, only: [:create, :destroy]
+  before_action only: [:create, :destroy] do
+    redirect_to root_path unless logged_in?
+  end
+
   before_action :is_participant_in_friendship, only: [:destroy, :accept, :reject]
 
   # POST /friendships

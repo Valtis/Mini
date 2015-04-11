@@ -3,9 +3,9 @@ class ApplicationController < ActionController::Base
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
 
-  helper_method :current_user, :image_owner_or_moderator?, :friendship_with_current_user, :has_right_to_see_image
+  helper_method :current_user, :image_owner_or_moderator?, :friendship_with_current_user, :has_right_to_see_image, :logged_in?
 
-  def is_logged_in
+  def logged_in?
     current_user != nil
   end
 
