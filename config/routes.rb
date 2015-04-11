@@ -10,6 +10,7 @@ Rails.application.routes.draw do
 
   resources :images, only: [:show, :index, :new, :create, :destroy] do
     post 'set_visibility', on: :member, to: 'images#set_visibility'
+    post 'set_album', on: :member, to: 'images#set_album'
   end
 
   resources :users

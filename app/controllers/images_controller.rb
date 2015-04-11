@@ -1,5 +1,5 @@
 class ImagesController < ApplicationController
-  before_action :set_image, only: [:show, :destroy, :set_visibility]
+  before_action :set_image, only: [:show, :destroy, :set_visibility, :set_album]
   before_action  only: [:show] do
     redirect_to root_path unless has_right_to_see_image(@image)
   end
@@ -18,6 +18,14 @@ class ImagesController < ApplicationController
   def show
 
     @visibility = %w[private friends public]
+    @albums = []
+    if current_user and current_user == @image.user
+
+     @albums = [{name:'None',id:nil}]
+     @image.user.albums.each do |album|
+       @albums << { name: album.name, id: album.id }
+     end
+    end
   end
 
   # GET /images/new
@@ -40,6 +48,19 @@ class ImagesController < ApplicationController
     end
 
     @image.save
+
+    redirect_to image_path(params[:id])
+  end
+
+
+  def set_album
+    redirect_to root_path unless current_user and @image.user == current_user
+    album = Album.find(params[:album])
+    redirect_to root_path unless album.user == current_user
+
+    @image.album = album
+    @image.save
+
 
     redirect_to image_path(params[:id])
   end

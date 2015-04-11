@@ -12,12 +12,18 @@
 <p><strong>Insert link to album if this belongs to one</strong></p>
 
 <% if current_user && current_user == @image.user %>
-    <select id="visibilityselect" onchange="setVisibility();">
-        <%= options_for_select(@visibility, value: @visibility) %>
-    </select>
-
-
-    <select><%= options_for_select(@image.user.albums, value: @image.user.albums) %></select>
+    <p>
+        <select id="visibilityselect" onchange="setVisibility();">
+            <%= options_for_select(@visibility, value: @visibility) %>
+        </select>
+    </p>
+    <p>
+        <select id="albumselect" onchange="setAlbum();">
+          <% @albums.each do |album| %>
+            <option value="<%= album[:id]%>"><%=album[:name] %></option>
+          <% end %>
+        </select>
+    </p>
 <% end %>
 
 
@@ -50,6 +56,10 @@
           visibility = "private"
       }
       selection.val(visibility);
+
+      selection = $("#albumselect");
+      selection.val( <%= if @image.album.nil? then 'undefined' else @image.album.id end %>);
+
   });
 
   function setVisibility() {
@@ -62,4 +72,16 @@
       req.setRequestHeader("Content-Type","application/json");
       req.send(JSON.stringify(data));
   }
+
+  function setAlbum() {
+      var req = new XMLHttpRequest();
+      req.open("POST", "<%= set_album_image_path %>");
+      var data = {
+          album: $("#albumselect").val(),
+          authenticity_token: '<%= form_authenticity_token %>'
+      };
+      req.setRequestHeader("Content-Type","application/json");
+      req.send(JSON.stringify(data));
+  }
+
 </script>
