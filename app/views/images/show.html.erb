@@ -42,16 +42,14 @@
 <%= link_to "#{image_tag @image.S3Image.url(:medium)}".html_safe, @image.S3Image.url(:original) %>
 
 
-
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-
-
 <!-- will be moved into its own file when views get redone -->
 <script type="application/javascript">
 
+
   $(document).ready(function() {
-      var selection = $("#visibilityselect");
-      var visibility = <%= @image.visibility %>;
+
+      var visibility = 0;
+      visibility = <%= @image.visibility %>;
 
       if (visibility === <%= Image::Visibility::PUBLIC %>) {
           visibility = "public"
@@ -60,10 +58,10 @@
       } else if (visibility === <%= Image::Visibility::PRIVATE %>) {
           visibility = "private"
       }
-      selection.val(visibility);
 
-      selection = $("#albumselect");
-      selection.val( <%= if @image.album.nil? then 'undefined' else @image.album.id end %>);
+      $("#visibilityselect").val(visibility);
+
+      $("#albumselect").val( <%= if @image.album.nil? then 'undefined' else @image.album.id end %>);
 
   });
 
