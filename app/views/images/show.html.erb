@@ -9,7 +9,11 @@
 </p>
 
 
-<p><strong>Insert link to album if this belongs to one</strong></p>
+<% if @image.album.nil? %>
+    <p><strong>Not part of any album</strong></p>
+<% else %>
+    <p><strong>Currently belongs to album <%= link_to "#{@image.album.name }", @image.album %></strong></p>
+<% end %>
 
 <% if current_user && current_user == @image.user %>
     <p>
@@ -24,6 +28,7 @@
           <% end %>
         </select>
     </p>
+
 <% end %>
 
 
@@ -80,6 +85,11 @@
           album: $("#albumselect").val(),
           authenticity_token: '<%= form_authenticity_token %>'
       };
+      req.onreadystatechange = function() {
+          if(req.readyState == this.DONE)
+            window.location.reload(true)
+      }
+
       req.setRequestHeader("Content-Type","application/json");
       req.send(JSON.stringify(data));
   }

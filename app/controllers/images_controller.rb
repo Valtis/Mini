@@ -55,10 +55,13 @@ class ImagesController < ApplicationController
 
   def set_album
     redirect_to root_path unless current_user and @image.user == current_user
-    album = Album.find(params[:album])
-    redirect_to root_path unless album.user == current_user
-
-    @image.album = album
+    if (params[:album].empty?)
+      @image.album = nil
+    else
+      album = Album.find(params[:album])
+      redirect_to root_path unless album.user == current_user
+      @image.album = album
+    end
     @image.save
 
 
