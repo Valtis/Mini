@@ -12,14 +12,15 @@
 <p><strong>Insert link to album if this belongs to one</strong></p>
 
 <% if current_user && current_user == @image.user %>
-    <p><strong>Insert visibility dropdown here if owner</strong></p>
-
     <select id="visibilityselect" onchange="setVisibility();">
         <%= options_for_select(@visibility, value: @visibility) %>
     </select>
 
 
+    <select><%= options_for_select(@image.user.albums, value: @image.user.albums) %></select>
 <% end %>
+
+
 
 <% if image_owner_or_moderator?(@image) %>
     <%= link_to 'Destroy', @image, method: :delete, data: { confirm: 'Are you sure?',  } %>

@@ -4,6 +4,10 @@ class AlbumsController < ApplicationController
     redirect_to root_path unless logged_in?
   end
 
+  before_action only: [:edit, :update, :destroy] do
+    redirect_to root_path unless @album.user == current_user
+  end
+
   # GET /albums
   # GET /albums.json
   def index
@@ -28,6 +32,7 @@ class AlbumsController < ApplicationController
   # POST /albums.json
   def create
     @album = Album.new(album_params)
+    @album.user = current_user
 
     respond_to do |format|
       if @album.save
