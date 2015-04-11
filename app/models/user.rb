@@ -9,6 +9,8 @@ class User < ActiveRecord::Base
   end
 
   has_many :image
+  has_many :albums
+
   has_many :pending_sent_requests, -> { where status: Friendship::Status::PENDING }, class_name: 'Friendship', foreign_key: 'requester_id'
   has_many :pending_received_requests, -> { where status: Friendship::Status::PENDING }, class_name: 'Friendship', foreign_key: 'friend_id'
 
