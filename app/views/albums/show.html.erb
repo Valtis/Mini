@@ -5,5 +5,16 @@
   <%= @album.name %>
 </p>
 
+
+
+<% unless @album.images.empty? %>
+    <p><strong>Album has the following images</strong></p>
+    <% @album.images.each do |image| %>
+        <%= link_to "#{image_tag(image.S3Image.url(:thumb))}".html_safe, image if has_right_to_see_image(image) %>
+        <br/>
+    <% end %>
+<% end %>
+
+
 <%= link_to 'Edit', edit_album_path(@album) %> |
 <%= link_to 'Back', albums_path %>
