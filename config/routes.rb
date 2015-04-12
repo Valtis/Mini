@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  resources :comments, only: [:create, :destroy]
+
   resources :albums
 
   resources :friendships, only: [:create] do

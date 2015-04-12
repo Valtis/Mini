@@ -74,44 +74,44 @@ RSpec.describe User, type: :model do
 
   it 'does not have moderator privileges set when role is normal' do
     user = FactoryGirl.create :user, role: User::Role::NORMAL
-    expect(user.has_moderator_privileges).to be(false)
+    expect(user.has_moderator_privileges?).to be(false)
   end
 
   it 'does not have moderator privileges set when role is banned' do
     user = FactoryGirl.create :user, role: User::Role::BANNED
-    expect(user.has_moderator_privileges).to be(false)
+    expect(user.has_moderator_privileges?).to be(false)
   end
 
   it 'has moderator privileges set when role is moderator' do
     user = FactoryGirl.create :user, role: User::Role::MODERATOR
 
-    expect(user.has_moderator_privileges).to be(true)
+    expect(user.has_moderator_privileges?).to be(true)
   end
 
   it 'has moderator privileges set when role is admin' do
     user = FactoryGirl.create :user, role: User::Role::ADMIN
-    expect(user.has_moderator_privileges).to be(true)
+    expect(user.has_moderator_privileges?).to be(true)
   end
 
   it 'does not have moderator privileges set when role is normal' do
     user = FactoryGirl.create :user, role: User::Role::NORMAL
-    expect(user.has_admin_privileges).to be(false)
+    expect(user.has_admin_privileges?).to be(false)
   end
 
   it 'does not have moderator privileges set when role is banned' do
     user = FactoryGirl.create :user, role: User::Role::BANNED
-    expect(user.has_admin_privileges).to be(false)
+    expect(user.has_admin_privileges?).to be(false)
   end
 
   it 'has moderator privileges set when role is moderator' do
     user = FactoryGirl.create :user, role: User::Role::MODERATOR
 
-    expect(user.has_admin_privileges).to be(false)
+    expect(user.has_admin_privileges?).to be(false)
   end
 
   it 'has moderator privileges set when role is admin' do
     user = FactoryGirl.create :user, role: User::Role::ADMIN
-    expect(user.has_admin_privileges).to be(true)
+    expect(user.has_admin_privileges?).to be(true)
   end
 
 

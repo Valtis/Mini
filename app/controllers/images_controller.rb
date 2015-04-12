@@ -16,6 +16,7 @@ class ImagesController < ApplicationController
   # GET /images/1
   # GET /images/1.json
   def show
+    @comment = Comment.new image_id: @image.id
 
     @visibility = %w[private friends public]
     @albums = []

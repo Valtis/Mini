@@ -10,6 +10,7 @@ class User < ActiveRecord::Base
 
   has_many :image
   has_many :albums
+  has_many :comments
 
   has_many :pending_sent_requests, -> { where status: Friendship::Status::PENDING }, class_name: 'Friendship', foreign_key: 'requester_id'
   has_many :pending_received_requests, -> { where status: Friendship::Status::PENDING }, class_name: 'Friendship', foreign_key: 'friend_id'
@@ -66,11 +67,11 @@ class User < ActiveRecord::Base
   end
 
 
-  def has_moderator_privileges
+  def has_moderator_privileges?
     role == Role::MODERATOR or role == Role::ADMIN
   end
 
-  def has_admin_privileges
+  def has_admin_privileges?
     role == Role::ADMIN
   end
 

@@ -42,6 +42,31 @@
 <%= link_to "#{image_tag @image.S3Image.url(:medium)}".html_safe, @image.S3Image.url(:original) %>
 
 
+<% @image.comments.each do |comment| %>
+    <section>
+        <p>Comment by <%= link_to "#{comment.user.username}", comment.user %><p/>
+        <p><%= comment.text %></p>
+        <% if comment_owner_or_moderator?(comment) %>
+            <%= link_to 'Delete comment', comment, method: :delete, data: { confirm: 'Are you sure' } %>
+        <% end %>
+    </section>
+    <br/>
+<% end %>
+
+<% if current_user %>
+
+    <%= form_for(@comment, method: 'post') do |f| %>
+        <%= f.text_area :text, size:'40x10' %>
+        <%= f.hidden_field :image_id %>
+        <br/>
+        <%= f.submit %>
+    <% end %>
+
+
+<% end %>
+
+
+
 <!-- will be moved into its own file when views get redone -->
 <script type="application/javascript">
 

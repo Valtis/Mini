@@ -8,6 +8,7 @@ class Image < ActiveRecord::Base
 
   belongs_to :album
   belongs_to :user
+  has_many :comments
 
   has_attached_file :S3Image, styles: {
                                thumb: '100x100>',
