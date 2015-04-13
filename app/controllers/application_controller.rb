@@ -12,7 +12,15 @@ class ApplicationController < ActionController::Base
 
   def current_user
     return nil if session[:user_id].nil?
-    User.find(session[:user_id])
+
+
+    user = User.find(session[:user_id])
+    if user.role == User::Role::BANNED
+      session[:user_id] = nil
+      return nil
+    end
+
+    return user
   end
 
   # can modify, if current_user has moderator\ədmin privileges and not modifying self
