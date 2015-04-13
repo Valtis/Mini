@@ -19,6 +19,14 @@ class User < ActiveRecord::Base
   has_many :friends_as_receiver, -> { where status: Friendship::Status::ACCEPTED }, class_name: 'Friendship', foreign_key: 'friend_id'
 
 
+  validates :username, uniqueness: true, length: { minimum: 3, maximum: 15 }
+  validates :password, length: { minimum: 8 }, unless: :skip_password_validation
+  validate :password_contains_capital_letter_and_number, unless: :skip_password_validation
+  validate :password_does_not_contain_username, unless: :skip_password_validation
+  validate :role_has_valid_range
+
+  attr_accessor :skip_password_validation
+
 
   def friends
     friendships = friends_as_requester + friends_as_receiver
@@ -39,13 +47,6 @@ class User < ActiveRecord::Base
   def is_friend_with(user)
     friends.include? user
   end
-
-
-  validates :username, uniqueness: true, length: { minimum: 3, maximum: 15 }
-  validates :password, length: { minimum: 8 }
-  validate :password_contains_capital_letter_and_number
-  validate :password_does_not_contain_username
-  validate :role_has_valid_range
 
 
   def password_contains_capital_letter_and_number
@@ -73,6 +74,18 @@ class User < ActiveRecord::Base
 
   def has_admin_privileges?
     role == Role::ADMIN
+  end
+
+  def roletext
+    if role == Role::ADMIN
+      return 'Admin'
+    elsif role == Role::MODERATOR
+      return 'Moderator'
+    elsif role == Role::BANNED
+      return 'Banned'
+    else
+      return 'Regular'
+    end
   end
 
 end

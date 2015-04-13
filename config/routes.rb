@@ -15,7 +15,9 @@ Rails.application.routes.draw do
     post 'set_album', on: :member, to: 'images#set_album'
   end
 
-  resources :users
+  resources :users do
+    post 'set_role', on: :member, to: 'users#set_role'
+  end
 
   resource :sessions, only: [:new, :create, :delete]
 

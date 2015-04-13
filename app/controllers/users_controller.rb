@@ -1,5 +1,11 @@
 class UsersController < ApplicationController
-  before_action :set_user, only: [:show, :edit, :update, :destroy]
+  before_action :set_user, only: [:show, :edit, :update, :destroy, :set_role]
+  before_action only: [:edit, :update, :destroy] do
+    redirect_to root_path unless current_user == @user
+  end
+  before_action only: [:set_role] do
+    redirect_to root_path unless can_modify_this_user_roles?(@user)
+  end
 
   # GET /users
   # GET /users.json
@@ -17,6 +23,22 @@ class UsersController < ApplicationController
         @friendship.friend = @user
       end
     end
+
+    if can_modify_this_user_roles?(@user)
+      @roles = [{ name: 'Regular', id: User::Role::NORMAL},
+                { name: 'Banned', id: User::Role::BANNED},
+                { name: 'Moderator', id: User::Role::MODERATOR}]
+      if (current_user.has_admin_privileges?)
+        @roles << { name: 'Admin', id: User::Role::ADMIN}
+      end
+    end
+  end
+
+  def set_role
+    @user.skip_password_validation = true
+    @user.role = params[:role]
+    @user.save
+    redirect_to user_path @user
   end
 
   # GET /users/new

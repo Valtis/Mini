@@ -4,7 +4,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
 
   helper_method :current_user, :image_owner_or_moderator?, :friendship_with_current_user, :has_right_to_see_image, :logged_in?,
-                :comment_owner_or_moderator?
+                :comment_owner_or_moderator?, :can_modify_this_user_roles?
 
   def logged_in?
     current_user != nil
@@ -14,6 +14,29 @@ class ApplicationController < ActionController::Base
     return nil if session[:user_id].nil?
     User.find(session[:user_id])
   end
+
+  # can modify, if current_user has moderator\ədmin privileges and not modifying self
+  # and if user is banned\regular. If user is moderator, only admins can modify
+  def can_modify_this_user_roles?(user)
+    if current_user.nil?
+      return false
+    end
+
+    if current_user == user
+      return false
+    end
+
+    if (current_user.has_admin_privileges?)
+      return true
+    end
+
+    if current_user.has_moderator_privileges? and not user.has_moderator_privileges?
+      return true
+    end
+
+    return false
+  end
+
 
   def image_owner_or_moderator?(image)
     current_user and (image.user == current_user or current_user.has_moderator_privileges?)
