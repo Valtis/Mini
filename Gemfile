@@ -31,6 +31,11 @@ gem 'paperclip', '~> 4.2'
 #amazon s3 gem
 gem 'aws-sdk', '< 2.0'
 
+gem 'bootstrap-sass'
+group :development do
+  gem 'rails_layout'
+end
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'

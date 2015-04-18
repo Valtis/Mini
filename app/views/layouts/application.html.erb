@@ -1,28 +1,20 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title>Mini</title>
-  <%= stylesheet_link_tag    'application', media: 'all' %>
-  <%= javascript_include_tag 'application' %>
-  <%= csrf_meta_tags %>
-</head>
-<body>
-<nav>
-    <span><%= link_to 'Images', images_path %></span>
-    <% if current_user %>
-        <span>
-          <%= link_to current_user.username, current_user %>
-        </span>
-        <%= link_to 'Log out', logout_path, method: :delete %>
-    <% else %>
-      <%= link_to 'Log in', new_sessions_path %>
-      <%= link_to 'Register', new_user_path %>
-    <% end %>
-    <span>Some</span>
-    <span>Placeholders</span>
-</nav>
-
-<%= yield %>
-
-</body>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= content_for?(:title) ? yield(:title) : "Mini" %></title>
+    <meta name="description" content="<%= content_for?(:description) ? yield(:description) : "Mini" %>">
+    <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track' => true %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+    <%= csrf_meta_tags %>
+  </head>
+  <body>
+    <header>
+      <%= render 'layouts/navigation' %>
+    </header>
+    <main role="main">
+       <%= render 'layouts/messages' %>
+       <%= yield %>
+    </main>
+  </body>
 </html>
