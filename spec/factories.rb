@@ -29,4 +29,10 @@ FactoryGirl.define do
     role User::Role::ADMIN
   end
 
+  factory :image do
+    user nil
+    album nil
+    visibility Image::Visibility::PUBLIC
+  end
+
 end
