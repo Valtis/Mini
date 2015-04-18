@@ -1,5 +1,9 @@
 class UsersController < ApplicationController
   before_action :set_user, only: [:show, :edit, :update, :destroy, :set_role]
+  # check that user is moderator
+  before_action only: [:index] do
+    redirect_to root_path unless current_user and current_user.has_moderator_privileges?
+  end
   before_action only: [:edit, :update, :destroy] do
     redirect_to root_path unless current_user == @user
   end

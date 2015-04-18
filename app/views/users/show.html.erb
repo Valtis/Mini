@@ -7,13 +7,15 @@
 
 <p>
   <strong>Status:</strong>
-  <%= @user.roletext %>
   <% if can_modify_this_user_roles?(@user) %>
       <select id="roleselect" onchange="setRole();">
         <% @roles.each do |role| %>
             <option value="<%= role[:id]%>"><%=role[:name] %></option>
         <% end %>
       </select>
+  <% else %>
+
+  <%= @user.role_string %>
   <% end %>
 </p>
 
@@ -114,11 +116,6 @@
             role: $("#roleselect").val(),
             authenticity_token: '<%= form_authenticity_token %>'
         };
-
-        req.onreadystatechange = function() {
-            if(req.readyState == this.DONE)
-            window.location.reload(true)
-        }
 
         req.setRequestHeader("Content-Type","application/json");
         req.send(JSON.stringify(data));

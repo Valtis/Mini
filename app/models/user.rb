@@ -76,7 +76,7 @@ class User < ActiveRecord::Base
     role == Role::ADMIN
   end
 
-  def roletext
+  def role_string
     if role == Role::ADMIN
       return 'Admin'
     elsif role == Role::MODERATOR

@@ -1,1 +1,7 @@
-<%# add navigation links to this file %>
+|
+<% if current_user.nil? %>
+    <li><%= link_to 'Log in', new_sessions_path %></li>
+    <li><%= link_to 'Register', new_user_path %></li>
+<% else %>
+
+<% end %>

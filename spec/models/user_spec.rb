@@ -114,6 +114,28 @@ RSpec.describe User, type: :model do
     expect(user.has_admin_privileges?).to be(true)
   end
 
+  describe 'role_string' do
+    it 'is correct for regular user' do
+      user = FactoryGirl.create :user
+      expect(user.role_string).to eq('Regular')
+    end
+
+    it 'is correct for banned user' do
+      user = FactoryGirl.create :banned
+      expect(user.role_string).to eq('Banned')
+    end
+
+    it 'is correct for moderator user' do
+      user = FactoryGirl.create :moderator
+      expect(user.role_string).to eq('Moderator')
+    end
+
+    it 'is correct for admin user' do
+      user = FactoryGirl.create :admin
+      expect(user.role_string).to eq('Admin')
+    end
+
+  end
 
   describe 'friendship' do
     before :each do
@@ -206,6 +228,8 @@ RSpec.describe User, type: :model do
       expect(@user.is_friend_with(@buddy)).to eq true
       expect(@buddy.is_friend_with(@user)).to eq true
     end
+
+
 
   end
 

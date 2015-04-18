@@ -2,11 +2,11 @@
 
 <h1>Listing Users</h1>
 
-<table>
+<table class="table table-striped">
   <thead>
     <tr>
       <th>Username</th>
-      <th>Status</th>
+      <th>Role</th>
       <th colspan="2"></th>
     </tr>
   </thead>
@@ -15,14 +15,10 @@
     <% @users.each do |user| %>
       <tr>
         <td><%= link_to user.username, user %></td>
-        <td><%= user.role %></td>
-        <td><%= link_to 'Edit', edit_user_path(user) %></td>
-        <td><%= link_to 'Destroy', user, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%= user.role_string %></td>
       </tr>
     <% end %>
   </tbody>
 </table>
 
 <br>
-
-<%= link_to 'New User', new_user_path %>
