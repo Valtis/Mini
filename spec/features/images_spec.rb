@@ -50,7 +50,7 @@ describe 'Image page ' do
     perform_login(@moderator.username, 'TestPassword1')
     visit images_path
 
-    expect(page).to zhave_link('Missing', href: image_path(@private_image))
+    expect(page).to have_link('Missing', href: image_path(@private_image))
     expect(page).to have_link('Missing', href: image_path(@friend_picture))
     expect(page).to have_link('Missing', href: image_path(@public_picture))
 

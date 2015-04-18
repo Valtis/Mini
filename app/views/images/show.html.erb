@@ -1,4 +1,3 @@
-<p id="notice"><%= notice %></p>
 
 <p><strong>Uploaded by: </strong>
   <% if @image.user %>
@@ -17,11 +16,13 @@
 
 <% if current_user && current_user == @image.user %>
     <p>
+      <span>Visiblity</span>
         <select id="visibilityselect" onchange="setVisibility();">
             <%= options_for_select(@visibility, value: @visibility) %>
         </select>
     </p>
     <p>
+      <span>Album</span>
         <select id="albumselect" onchange="setAlbum();">
           <% @albums.each do |album| %>
             <option value="<%= album[:id]%>"><%=album[:name] %></option>
