@@ -5,3 +5,4 @@
 11.4 Kuva-albumi. n 3h
 12.4 Kommentit. n. 1h
 13.4 Roolin vaihtelu, bannit. N. 1h
+18.4 Testejä, ulkonäköä. N 2h
