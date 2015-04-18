@@ -20,7 +20,7 @@ class Image < ActiveRecord::Base
 
   # could not figure out how to do this cleanly from scope, so use method instead
   def self.visible_images_for(request_user)
-    Image.all.select{ |i| i.has_right_to_see_image(request_user) }
+    Image.all.select{ |i| i.has_right_to_see_image?(request_user) }
   end
 
 
@@ -30,7 +30,7 @@ class Image < ActiveRecord::Base
     end
   end
 
-  def has_right_to_see_image(request_user)
+  def has_right_to_see_image?(request_user)
     # if image is public, image is uploaded by anonymous user, user is moderator/admin or user owns the image, then return true
     return true if visibility == Image::Visibility::PUBLIC or user.nil? or
         (request_user.nil? == false and (request_user.has_moderator_privileges? or user == request_user))
