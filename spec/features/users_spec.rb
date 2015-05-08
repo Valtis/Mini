@@ -40,6 +40,13 @@ describe 'User' do
       visit new_sessions_path
       expect(current_path).to eq(root_path)
     end
+
+    it 'can log out and is redirected to root' do
+      perform_login('TestUser', 'TestPassword1')
+      perform_logout()
+      expect(current_path).to eq(root_path)
+      expect(current_user).to be(nil)
+    end
   end
 
 

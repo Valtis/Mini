@@ -8,6 +8,10 @@ module CommonMethods
     click_button('Log in')
   end
 
+  def perform_logout
+    click_link('Log out')
+  end
+
   def create_account(username, password, password_confirm)
     visit new_user_path
     click_link('Register')
