@@ -43,9 +43,15 @@ describe 'User' do
 
     it 'can log out and is redirected to root' do
       perform_login('TestUser', 'TestPassword1')
+      expect(page).not_to have_content('Log in')
+      expect(page).to have_content('Log out')
+
       perform_logout()
+
       expect(current_path).to eq(root_path)
-      expect(current_user).to be(nil)
+      expect(page).to have_content('Log in')
+      expect(page).not_to have_content('Log out')
+
     end
   end
 
