@@ -5,6 +5,8 @@ Imgur-klooni: Käyttäjä voi ladata kuvia joko anonyymisti tai rekisteröitynee
 
 Alustava tarkoitus olisi tallentaa kuvat Amazonin palvelimille. Katsotaan projektin kuluessa tuleeko toteutettua.
 
+Testauksessa on tarkoitus testata yksikkötesteillä modelit ja integraatiotesteillä kontrollerit\näkymät.  
+
 ![UML](http://yuml.me/309dd55c.svg)
   
   

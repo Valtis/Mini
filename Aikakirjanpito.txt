@@ -6,3 +6,4 @@
 12.4 Kommentit. n. 1h
 13.4 Roolin vaihtelu, bannit. N. 1h
 18.4 Testejä, ulkonäköä. N 2h
+8.5 Profiilisivulle testit, profiilisivun ulkoasun pienoista parantelemista. N. 2.5h

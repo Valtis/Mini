@@ -3,15 +3,7 @@ include CommonMethods
 
 describe 'User profile page' do
 
-  before :all do
-    self.use_transactional_fixtures = false
-    WebMock.disable_net_connect!(allow_localhost:true)
-  end
-
-
   before :each do
-    DatabaseCleaner.strategy = :truncation
-    DatabaseCleaner.start
 
     @user = FactoryGirl.create :user
     @buddy = FactoryGirl.create :user, username: 'Buddy'
@@ -32,13 +24,6 @@ describe 'User profile page' do
   end
 
 
-  after :each do
-    DatabaseCleaner.clean
-  end
-
-  after :all do
-    self.use_transactional_fixtures = true
-  end
 
   it 'shows user name' do
     visit user_path @user
@@ -263,17 +248,6 @@ describe 'User profile page' do
     perform_login(@admin.username, 'TestPassword1')
     visit user_path @admin
     expect(page).not_to have_select('roleselect', options: ['Regular', 'Banned', 'Moderator', 'Admin'])
-  end
-
-
-  it 'role change functionality works' , js:true do
-
-    perform_login(@moderator.username, 'TestPassword1')
-
-    visit user_path @stranger
-    select 'Moderator', from: 'roleselect'
-    expect(User.find(@stranger.id).role).to eq(User::Role::MODERATOR)
-
   end
 
 end
