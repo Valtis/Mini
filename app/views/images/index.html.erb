@@ -5,7 +5,7 @@
 
   <% @images.each do |image| %>
       <div class="col-lg-3 col-sm-4 col-xs-6">
-        <%= link_to "#{image_tag(image.S3Image.url(:medium), class: 'img-responsive')}".html_safe, image, class: 'thumbnail pull-left' %>
+        <%= link_to "#{image_tag(image.S3Image.url(:medium))}".html_safe, image, class: 'img-responsive thumbnail pull-left' %>
       </div>
   <% end %>
 </div>

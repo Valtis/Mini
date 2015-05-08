@@ -1,21 +1,18 @@
-<p>
-  <strong>Username:</strong>
-  <%= @user.username %>
-</p>
+<h1><%= @user.username %></h1>
 
-<p>
-  <strong>Status:</strong>
   <% if can_modify_this_user_roles?(@user) %>
-      <select id="roleselect" onchange="setRole();">
+      User role: <select id="roleselect" onchange="setRole();">
         <% @roles.each do |role| %>
             <option value="<%= role[:id]%>"><%=role[:name] %></option>
         <% end %>
       </select>
   <% else %>
-
-  <%= @user.role_string %>
+    <h2>
+      <%= @user.role_string %> user
+    </h2>
   <% end %>
-</p>
+
+
 
 
 
@@ -25,23 +22,25 @@
     <p>
       <%= link_to "#{friend.username}", friend %>
       <% if current_user == @user %>
-          <%= link_to 'Cancel friendship', reject_friendship_path(friendship_with_current_user(friend)), method: :delete %>
+          <%= link_to 'Cancel friendship', reject_friendship_path(friendship_with_current_user(friend)), class:"btn btn-danger", method: :delete %>
       <% end %>
     </p>
     <% end %>
 <% end %>
 
 
-
+<!-- oh dear what a mess -->
 <% if current_user == @user %>
     <!-- list friends -->
     <!-- list outstanding received friendship requests, if any-->
     <% unless @user.pending_received_requests.empty? %>
         <p><strong>You have outstanding received friend requests</strong></p>
         <% @user.pending_received_requests.each do |request| %>
-            <p>Request from <%= link_to "#{request.requester.username}", request.requester %>
-            <%= link_to 'Accept friendship', accept_friendship_path(request.id), method: :post %>
-            <%= link_to 'Reject friendship', reject_friendship_path(request.id), method: :delete %>
+            <p><strong>Request from <%= link_to "#{request.requester.username}", request.requester %></strong>
+                <p>
+                    <%= link_to 'Accept friendship', accept_friendship_path(request.id), class:"btn btn-primary", method: :post %>
+                    <%= link_to 'Reject friendship', reject_friendship_path(request.id), class:"btn btn-danger", method: :delete %>
+                </p>
             </p>
             <br/>
         <% end %>
@@ -51,12 +50,19 @@
     <% unless @user.pending_sent_requests.empty? %>
         <p><strong>You have outstanding sent friend requests</strong></p>
         <% @user.pending_sent_requests.each do |request| %>
-            <p>Request to <%= link_to "#{request.friend.username}", request.friend %>
-            <%= link_to 'Withdraw request', reject_friendship_path(request.id), method: :delete %></p>
-            <br/>
+            <p>
+                Request to <%= link_to "#{request.friend.username}", request.friend %>
+                <p><%= link_to 'Withdraw request', reject_friendship_path(request.id), class:"btn btn-danger", method: :delete %></p>
+            </p>
         <% end %>
     <% end %>
 <% else %>
+    <!-- if current user is not nil-->
+    <!-- if has no friendship active, show request friendship button -->
+    <!-- if has pending friendship request, show withdrawal button if requester -->
+    <!-- if has pending friendship request, show accept/reject buttons if target of request -->
+    <!-- if has accepted friendship request, show cancel friendship button -->
+
     <% unless current_user.nil? %>
         <% friendship = friendship_with_current_user(@user) %>
         <% if friendship == nil %>
@@ -66,13 +72,13 @@
             <% end %>
         <% else %>
             <% if friendship.status == Friendship::Status::PENDING and friendship.requester == current_user %>
-                <p><%= link_to 'Cancel pending request', reject_friendship_path(friendship_with_current_user(@user)), method: :delete %></p>
+                <p><%= link_to 'Cancel pending request', reject_friendship_path(friendship_with_current_user(@user)), class:"btn btn-danger", method: :delete %></p>
             <% elsif friendship.status == Friendship::Status::PENDING and friendship.friend == current_user %>
-                <p>Outstanding friend request from this user</p>
-                <%= link_to 'Accept friendship', accept_friendship_path(friendship.id), method: :post %>
-                <%= link_to 'Reject friendship', reject_friendship_path(friendship.id), method: :delete %>
+                <p><strong>Outstanding friend request from this user</strong></p>
+                <%= link_to 'Accept friendship', accept_friendship_path(friendship.id), class:"btn btn-primary", method: :post %>
+                <%= link_to 'Reject friendship', reject_friendship_path(friendship.id), class:"btn btn-danger", method: :delete %>
                <% elsif friendship.status == Friendship::Status::ACCEPTED%>
-                <p><%= link_to 'Cancel friendship', reject_friendship_path(friendship_with_current_user(@user)), method: :delete %></p>
+                <p><%= link_to 'Cancel friendship', reject_friendship_path(friendship_with_current_user(@user)), class:"btn btn-danger", method: :delete %></p>
             <% end %>
         <% end %>
 
@@ -92,10 +98,16 @@
 
 <% unless @user.image.empty? %>
     <p><strong>User has uploaded the following images</strong></p>
-    <% @user.image.each do |image| %>
-        <%= link_to "#{image_tag(image.S3Image.url(:thumb))}".html_safe, image if has_right_to_see_image(image) %>
-        <br/>
-    <% end %>
+
+    <div class="row">
+
+      <% @user.image.each do |image| %>
+          <div class="col-lg-3 col-sm-4 col-xs-6">
+            <%= link_to "#{image_tag(image.S3Image.url(:medium))}".html_safe, image, class: 'img-responsive thumbnail pull-left' if has_right_to_see_image(image) %>
+          </div>
+      <% end %>
+    </div>
+
 <% end %>
 
 
