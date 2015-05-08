@@ -1,5 +1,3 @@
-<p id="notice"><%= notice %></p>
-
 <p>
   <strong>Username:</strong>
   <%= @user.username %>
@@ -67,9 +65,13 @@
                 <%= f.submit value: "Request friendship with #{@user.username}" %>
             <% end %>
         <% else %>
-            <% if friendship.status == Friendship::Status::PENDING %>
+            <% if friendship.status == Friendship::Status::PENDING and friendship.requester == current_user %>
                 <p><%= link_to 'Cancel pending request', reject_friendship_path(friendship_with_current_user(@user)), method: :delete %></p>
-            <% else %>
+            <% elsif friendship.status == Friendship::Status::PENDING and friendship.friend == current_user %>
+                <p>Outstanding friend request from this user</p>
+                <%= link_to 'Accept friendship', accept_friendship_path(friendship.id), method: :post %>
+                <%= link_to 'Reject friendship', reject_friendship_path(friendship.id), method: :delete %>
+               <% elsif friendship.status == Friendship::Status::ACCEPTED%>
                 <p><%= link_to 'Cancel friendship', reject_friendship_path(friendship_with_current_user(@user)), method: :delete %></p>
             <% end %>
         <% end %>
@@ -97,13 +99,8 @@
 <% end %>
 
 
-<%= link_to 'Edit', edit_user_path(@user) %> |
-<%= link_to 'Back', users_path %>
-
-
 <% if can_modify_this_user_roles?(@user) %>
 <script type="application/javascript">
-
     $(document).ready(function() {
         $("#roleselect").val(<%= @user.role %>);
     });
@@ -113,13 +110,12 @@
         req.open("POST", "<%= set_role_user_path  %>");
 
         var data = {
-            role: $("#roleselect").val(),
-            authenticity_token: '<%= form_authenticity_token %>'
+        role: $("#roleselect").val(),
+        authenticity_token: '<%= form_authenticity_token %>'
         };
 
         req.setRequestHeader("Content-Type","application/json");
         req.send(JSON.stringify(data));
     }
 </script>
-
 <% end %>

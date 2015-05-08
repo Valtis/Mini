@@ -55,6 +55,8 @@ group :test do
   gem 'capybara'
   gem 'launchy'
   gem 'webmock'
+  gem 'selenium-webdriver'
+  gem 'database_cleaner'
 end
 
 group :production do
