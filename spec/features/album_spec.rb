@@ -33,6 +33,7 @@ describe 'Album page ' do
     album = Album.create name: 'AlbumName123', user: @user
     visit album_path(album)
 
+    expect(page).not_to have_content('Album has the following images')
     expect(page).not_to have_link('Missing', href: image_path(@private_image))
     expect(page).not_to have_link('Missing', href: image_path(@friend_picture))
     expect(page).not_to have_link('Missing', href: image_path(@public_picture))
@@ -43,6 +44,9 @@ describe 'Album page ' do
   it 'shows all images that belongs to album to owner' do
     perform_login(@user.username, 'TestPassword1')
     visit album_path(@album)
+
+
+    expect(page).to have_content('Album has the following images')
     expect(page).to have_link('Missing', href: image_path(@private_image))
     expect(page).to have_link('Missing', href: image_path(@friend_picture))
     expect(page).to have_link('Missing', href: image_path(@public_picture))
@@ -110,5 +114,47 @@ describe 'Album page ' do
     expect(page).not_to have_link('Missing', href: image_path(@non_album_image))
     expect(page).not_to have_link('Missing', href: image_path(@non_user_image))
   end
+
+  it 'allows owner to change name' do
+
+    perform_login(@user.username, 'TestPassword1')
+    visit album_path(@album)
+    expect(page).to have_link('Change album name', edit_album_path(@album))
+
+    click_link('Change album name')
+
+    fill_in('album_name', with: 'NewName')
+    click_button('Update Album')
+
+    expect(Album.find(@album.id).name).to eq('NewName')
+  end
+
+  it 'does not show edit link to stranger' do
+    perform_login(@stranger.username, 'TestPassword1')
+    visit album_path(@album)
+    expect(page).not_to have_link('Change album name', edit_album_path(@album))
+
+  end
+
+  it 'does not show edit link to moderator' do
+
+    perform_login(@moderator.username, 'TestPassword1')
+    visit album_path(@album)
+    expect(page).not_to have_link('Change album name', edit_album_path(@album))
+  end
+
+  it 'does not show edit link to admin' do
+
+    perform_login(@admin.username, 'TestPassword1')
+    visit album_path(@album)
+    expect(page).not_to have_link('Change album name', edit_album_path(@album))
+  end
+
+  it 'does not show edit link to anonymous' do
+    visit album_path(@album)
+    expect(page).not_to have_link('Change album name', edit_album_path(@album))
+  end
+
+
 
 end

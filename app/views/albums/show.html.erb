@@ -1,20 +1,15 @@
-<p id="notice"><%= notice %></p>
+<h1><%= "#{@album.name} by #{@album.user.username}" %></h1>
 
-<p>
-  <strong>Name:</strong>
-  <%= @album.name %>
-</p>
+<% if @album.user == current_user and current_user %>
+    <%= link_to 'Change album name', edit_album_path %>
+<% end %>
 
 
 
 <% unless @album.images.empty? %>
     <p><strong>Album has the following images</strong></p>
-    <% @album.images.each do |image| %>
-        <%= link_to "#{image_tag(image.S3Image.url(:thumb))}".html_safe, image if has_right_to_see_image(image) %>
+    <% @album.visible_images_for(current_user).each do |image| %>
+        <%= link_to "#{image_tag(image.S3Image.url(:thumb))}".html_safe, image %>
         <br/>
     <% end %>
 <% end %>
-
-
-<%= link_to 'Edit', edit_album_path(@album) %> |
-<%= link_to 'Back', albums_path %>
