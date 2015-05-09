@@ -61,6 +61,11 @@ class User < ActiveRecord::Base
     end
   end
 
+
+  def visible_images_for(request_user)
+    image.all.select{ |i| i.has_right_to_see_image?(request_user) }
+  end
+
   def role_has_valid_range
     if !role or role < 0 or role > 3
       errors.add(:role, 'has invalid value')

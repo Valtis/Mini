@@ -6,10 +6,8 @@
 
 
 
+
 <% unless @album.images.empty? %>
     <p><strong>Album has the following images</strong></p>
-    <% @album.visible_images_for(current_user).each do |image| %>
-        <%= link_to "#{image_tag(image.S3Image.url(:thumb))}".html_safe, image %>
-        <br/>
-    <% end %>
+    <%= render 'images/image_grid', images: @album.visible_images_for(current_user), size: :medium %>
 <% end %>
