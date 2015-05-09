@@ -53,6 +53,5 @@ describe 'Image page ' do
     expect(page).to have_link('Missing', href: image_path(@private_image))
     expect(page).to have_link('Missing', href: image_path(@friend_picture))
     expect(page).to have_link('Missing', href: image_path(@public_picture))
-
   end
 end

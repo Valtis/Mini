@@ -24,10 +24,6 @@ class AlbumsController < ApplicationController
     @album = Album.new
   end
 
-  # GET /albums/1/edit
-  def edit
-  end
-
   # POST /albums
   # POST /albums.json
   def create
@@ -40,20 +36,6 @@ class AlbumsController < ApplicationController
         format.json { render :show, status: :created, location: @album }
       else
         format.html { render :new }
-        format.json { render json: @album.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-
-  # PATCH/PUT /albums/1
-  # PATCH/PUT /albums/1.json
-  def update
-    respond_to do |format|
-      if @album.update(album_params)
-        format.html { redirect_to @album, notice: 'Album was successfully updated.' }
-        format.json { render :show, status: :ok, location: @album }
-      else
-        format.html { render :edit }
         format.json { render json: @album.errors, status: :unprocessable_entity }
       end
     end
