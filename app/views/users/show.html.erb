@@ -88,10 +88,12 @@
 
 
 <% unless @user.albums.count == 0 %>
+
     <p><strong>User has the following albums</strong></p>
     <% @user.albums.each do |album| %>
-       <%= link_to "#{album.name}", album %>
+       <p><%= link_to "#{album.name}", album %></p>
     <% end %>
+
 <% end %>
 
 

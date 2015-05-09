@@ -9,8 +9,8 @@ describe 'Image page ' do
     @moderator = FactoryGirl.create :moderator
 
     @private_image = FactoryGirl.create :image, user: @user, visibility: Image::Visibility::PRIVATE
-    @friend_picture = FactoryGirl.create :image, user: @user, visibility: Image::Visibility::FRIENDS
-    @public_picture = FactoryGirl.create :image, user: @user, visibility: Image::Visibility::PUBLIC
+    @friend_image = FactoryGirl.create :image, user: @user, visibility: Image::Visibility::FRIENDS
+    @public_image = FactoryGirl.create :image, user: @user, visibility: Image::Visibility::PUBLIC
 
     Friendship.create requester_id: @user.id, friend_id: @buddy.id, status: Friendship::Status::ACCEPTED
 
@@ -22,8 +22,8 @@ describe 'Image page ' do
     #image is not set, so we get text missing. This is fine
 
     expect(page).to have_link('Missing', href: image_path(@private_image))
-    expect(page).to have_link('Missing', href: image_path(@friend_picture))
-    expect(page).to have_link('Missing', href: image_path(@public_picture))
+    expect(page).to have_link('Missing', href: image_path(@friend_image))
+    expect(page).to have_link('Missing', href: image_path(@public_image))
   end
 
   it 'shows public and friend images to user friend' do
@@ -31,8 +31,8 @@ describe 'Image page ' do
     visit images_path
 
     expect(page).not_to have_link('Missing', href: image_path(@private_image))
-    expect(page).to have_link('Missing', href: image_path(@friend_picture))
-    expect(page).to have_link('Missing', href: image_path(@public_picture))
+    expect(page).to have_link('Missing', href: image_path(@friend_image))
+    expect(page).to have_link('Missing', href: image_path(@public_image))
 
   end
 
@@ -41,8 +41,8 @@ describe 'Image page ' do
     visit images_path
 
     expect(page).not_to have_link('Missing', href: image_path(@private_image))
-    expect(page).not_to have_link('Missing', href: image_path(@friend_picture))
-    expect(page).to have_link('Missing', href: image_path(@public_picture))
+    expect(page).not_to have_link('Missing', href: image_path(@friend_image))
+    expect(page).to have_link('Missing', href: image_path(@public_image))
 
   end
 
@@ -51,7 +51,7 @@ describe 'Image page ' do
     visit images_path
 
     expect(page).to have_link('Missing', href: image_path(@private_image))
-    expect(page).to have_link('Missing', href: image_path(@friend_picture))
-    expect(page).to have_link('Missing', href: image_path(@public_picture))
+    expect(page).to have_link('Missing', href: image_path(@friend_image))
+    expect(page).to have_link('Missing', href: image_path(@public_image))
   end
 end

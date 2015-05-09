@@ -12,8 +12,8 @@ describe 'Album page ' do
     @album = Album.create name: 'AlbumName', user: @user
 
     @private_image = FactoryGirl.create :image, user: @user, visibility: Image::Visibility::PRIVATE, album: @album
-    @friend_picture = FactoryGirl.create :image, user: @user, visibility: Image::Visibility::FRIENDS, album: @album
-    @public_picture = FactoryGirl.create :image, user: @user, visibility: Image::Visibility::PUBLIC, album: @album
+    @friend_image = FactoryGirl.create :image, user: @user, visibility: Image::Visibility::FRIENDS, album: @album
+    @public_image = FactoryGirl.create :image, user: @user, visibility: Image::Visibility::PUBLIC, album: @album
 
     @non_album_image = FactoryGirl.create :image, user: @user, visibility: Image::Visibility::PUBLIC
     @non_user_image = FactoryGirl.create :image, user: @stranger, visibility: Image::Visibility::PUBLIC
@@ -35,8 +35,8 @@ describe 'Album page ' do
 
     expect(page).not_to have_content('Album has the following images')
     expect(page).not_to have_link('Missing', href: image_path(@private_image))
-    expect(page).not_to have_link('Missing', href: image_path(@friend_picture))
-    expect(page).not_to have_link('Missing', href: image_path(@public_picture))
+    expect(page).not_to have_link('Missing', href: image_path(@friend_image))
+    expect(page).not_to have_link('Missing', href: image_path(@public_image))
     expect(page).not_to have_link('Missing', href: image_path(@non_album_image))
     expect(page).not_to have_link('Missing', href: image_path(@non_user_image))
   end
@@ -48,8 +48,8 @@ describe 'Album page ' do
 
     expect(page).to have_content('Album has the following images')
     expect(page).to have_link('Missing', href: image_path(@private_image))
-    expect(page).to have_link('Missing', href: image_path(@friend_picture))
-    expect(page).to have_link('Missing', href: image_path(@public_picture))
+    expect(page).to have_link('Missing', href: image_path(@friend_image))
+    expect(page).to have_link('Missing', href: image_path(@public_image))
     expect(page).not_to have_link('Missing', href: image_path(@non_album_image))
     expect(page).not_to have_link('Missing', href: image_path(@non_user_image))
 
@@ -62,8 +62,8 @@ describe 'Album page ' do
     visit album_path(@album)
 
     expect(page).to have_link('Missing', href: image_path(@private_image))
-    expect(page).to have_link('Missing', href: image_path(@friend_picture))
-    expect(page).to have_link('Missing', href: image_path(@public_picture))
+    expect(page).to have_link('Missing', href: image_path(@friend_image))
+    expect(page).to have_link('Missing', href: image_path(@public_image))
     expect(page).not_to have_link('Missing', href: image_path(@non_album_image))
     expect(page).not_to have_link('Missing', href: image_path(@non_user_image))
   end
@@ -75,8 +75,8 @@ describe 'Album page ' do
     visit album_path(@album)
 
     expect(page).to have_link('Missing', href: image_path(@private_image))
-    expect(page).to have_link('Missing', href: image_path(@friend_picture))
-    expect(page).to have_link('Missing', href: image_path(@public_picture))
+    expect(page).to have_link('Missing', href: image_path(@friend_image))
+    expect(page).to have_link('Missing', href: image_path(@public_image))
     expect(page).not_to have_link('Missing', href: image_path(@non_album_image))
     expect(page).not_to have_link('Missing', href: image_path(@non_user_image))
   end
@@ -86,8 +86,8 @@ describe 'Album page ' do
     visit album_path(@album)
 
     expect(page).not_to have_link('Missing', href: image_path(@private_image))
-    expect(page).not_to have_link('Missing', href: image_path(@friend_picture))
-    expect(page).to have_link('Missing', href: image_path(@public_picture))
+    expect(page).not_to have_link('Missing', href: image_path(@friend_image))
+    expect(page).to have_link('Missing', href: image_path(@public_image))
     expect(page).not_to have_link('Missing', href: image_path(@non_album_image))
     expect(page).not_to have_link('Missing', href: image_path(@non_user_image))
   end
@@ -98,8 +98,8 @@ describe 'Album page ' do
     visit album_path(@album)
 
     expect(page).not_to have_link('Missing', href: image_path(@private_image))
-    expect(page).not_to have_link('Missing', href: image_path(@friend_picture))
-    expect(page).to have_link('Missing', href: image_path(@public_picture))
+    expect(page).not_to have_link('Missing', href: image_path(@friend_image))
+    expect(page).to have_link('Missing', href: image_path(@public_image))
     expect(page).not_to have_link('Missing', href: image_path(@non_album_image))
     expect(page).not_to have_link('Missing', href: image_path(@non_user_image))
   end
@@ -109,8 +109,8 @@ describe 'Album page ' do
     visit album_path(@album)
 
     expect(page).not_to have_link('Missing', href: image_path(@private_image))
-    expect(page).to have_link('Missing', href: image_path(@friend_picture))
-    expect(page).to have_link('Missing', href: image_path(@public_picture))
+    expect(page).to have_link('Missing', href: image_path(@friend_image))
+    expect(page).to have_link('Missing', href: image_path(@public_image))
     expect(page).not_to have_link('Missing', href: image_path(@non_album_image))
     expect(page).not_to have_link('Missing', href: image_path(@non_user_image))
   end
@@ -155,6 +155,30 @@ describe 'Album page ' do
     expect(page).not_to have_link('Change album name', edit_album_path(@album))
   end
 
+  it 'has delete link if user owns the album' do
+    perform_login(@user.username, 'TestPassword1')
+    visit album_path(@album)
+    expect(page).to have_link('Delete album', album_path(@album))
+  end
+
+
+  it 'allows owner to delete the album' do
+
+    perform_login(@user.username, 'TestPassword1')
+    visit album_path(@album)
+    click_link('Delete album')
+
+    expect(Album.exists?(@album.id)).to be(false)
+    expect(Image.find(@private_image.id).album).to be(nil)
+    expect(Image.find(@friend_image.id).album).to be(nil)
+    expect(Image.find(@public_image.id).album).to be(nil)
+
+  end
+
+  it 'has no delete link if user does not own the album' do
+    visit album_path(@album)
+    expect(page).not_to have_link('Delete album', album_path(@album))
+  end
 
 
 end

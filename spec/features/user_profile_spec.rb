@@ -15,8 +15,8 @@ describe 'User profile page' do
     @admin2 = FactoryGirl.create :admin, username: 'Admin2'
 
     @private_image = FactoryGirl.create :image, user: @user, visibility: Image::Visibility::PRIVATE
-    @friend_picture = FactoryGirl.create :image, user: @user, visibility: Image::Visibility::FRIENDS
-    @public_picture = FactoryGirl.create :image, user: @user, visibility: Image::Visibility::PUBLIC
+    @friend_image = FactoryGirl.create :image, user: @user, visibility: Image::Visibility::FRIENDS
+    @public_image = FactoryGirl.create :image, user: @user, visibility: Image::Visibility::PUBLIC
 
     @buddyfriendship=Friendship.create requester_id: @user.id, friend_id: @buddy.id, status: Friendship::Status::ACCEPTED
     @strangerfriendship=Friendship.create requester_id: @user.id, friend_id: @stranger.id, status: Friendship::Status::PENDING
@@ -35,30 +35,30 @@ describe 'User profile page' do
     perform_login(@user.username, 'TestPassword1')
     visit user_path @user
     expect(page).to have_link('Missing', href: image_path(@private_image))
-    expect(page).to have_link('Missing', href: image_path(@friend_picture))
-    expect(page).to have_link('Missing', href: image_path(@public_picture))
+    expect(page).to have_link('Missing', href: image_path(@friend_image))
+    expect(page).to have_link('Missing', href: image_path(@public_image))
   end
 
   it 'shows all images to an admin' do
     perform_login(@admin.username, 'TestPassword1')
     visit user_path @user
     expect(page).to have_link('Missing', href: image_path(@private_image))
-    expect(page).to have_link('Missing', href: image_path(@friend_picture))
-    expect(page).to have_link('Missing', href: image_path(@public_picture))
+    expect(page).to have_link('Missing', href: image_path(@friend_image))
+    expect(page).to have_link('Missing', href: image_path(@public_image))
   end
 
   it 'shows only public images to anonymous user' do
     visit user_path @user
     expect(page).not_to have_link('Missing', href: image_path(@private_image))
-    expect(page).not_to have_link('Missing', href: image_path(@friend_picture))
-    expect(page).to have_link('Missing', href: image_path(@public_picture))
+    expect(page).not_to have_link('Missing', href: image_path(@friend_image))
+    expect(page).to have_link('Missing', href: image_path(@public_image))
   end
 
   it 'shows only public images to pending friend' do
     visit user_path @user
     expect(page).not_to have_link('Missing', href: image_path(@private_image))
-    expect(page).not_to have_link('Missing', href: image_path(@friend_picture))
-    expect(page).to have_link('Missing', href: image_path(@public_picture))
+    expect(page).not_to have_link('Missing', href: image_path(@friend_image))
+    expect(page).to have_link('Missing', href: image_path(@public_image))
   end
 
 
@@ -66,8 +66,8 @@ describe 'User profile page' do
     perform_login(@buddy.username, 'TestPassword1')
     visit user_path @user
     expect(page).not_to have_link('Missing', href: image_path(@private_image))
-    expect(page).to have_link('Missing', href: image_path(@friend_picture))
-    expect(page).to have_link('Missing', href: image_path(@public_picture))
+    expect(page).to have_link('Missing', href: image_path(@friend_image))
+    expect(page).to have_link('Missing', href: image_path(@public_image))
   end
 
 
@@ -248,6 +248,25 @@ describe 'User profile page' do
     perform_login(@admin.username, 'TestPassword1')
     visit user_path @admin
     expect(page).not_to have_select('roleselect', options: ['Regular', 'Banned', 'Moderator', 'Admin'])
+  end
+
+  it 'shows no album realted text if user has no albums' do
+    visit user_path @user
+    expect(page).not_to have_content('User has the following albums')
+  end
+
+  it 'lists all user albums' do
+    @album = Album.create name: 'AlbumName', user: @user
+    @album2 = Album.create name: 'AlbumName2', user: @user
+    @album3 = Album.create name: 'AlbumName3', user: @stranger
+
+    visit user_path @user
+
+    expect(page).to have_content('User has the following albums')
+    expect(page).to have_link("#{@album.name}", album_path(@album))
+    expect(page).to have_link("#{@album2.name}", album_path(@album2))
+    expect(page).not_to have_link("#{@album3.name}", album_path(@album3))
+
   end
 
 end

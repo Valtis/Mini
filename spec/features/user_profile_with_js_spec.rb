@@ -24,8 +24,8 @@ describe 'User profile page with js' do
     @admin2 = FactoryGirl.create :admin, username: 'Admin2'
 
     @private_image = FactoryGirl.create :image, user: @user, visibility: Image::Visibility::PRIVATE
-    @friend_picture = FactoryGirl.create :image, user: @user, visibility: Image::Visibility::FRIENDS
-    @public_picture = FactoryGirl.create :image, user: @user, visibility: Image::Visibility::PUBLIC
+    @friend_image = FactoryGirl.create :image, user: @user, visibility: Image::Visibility::FRIENDS
+    @public_image = FactoryGirl.create :image, user: @user, visibility: Image::Visibility::PUBLIC
 
     @buddyfriendship=Friendship.create requester_id: @user.id, friend_id: @buddy.id, status: Friendship::Status::ACCEPTED
     @strangerfriendship=Friendship.create requester_id: @user.id, friend_id: @stranger.id, status: Friendship::Status::PENDING
