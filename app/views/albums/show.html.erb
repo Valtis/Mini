@@ -2,7 +2,7 @@
 
 <% if @album.user == current_user and current_user %>
     <%= link_to 'Change album name', edit_album_path, class:'btn btn-primary' %>
-    <%= link_to 'Delete album', album_path, class:'btn btn-danger', method: :delete %>
+    <%= link_to 'Delete album', album_path, class:'btn btn-danger', method: :delete, data: { confirm: 'Do you really want to delete this album' } %>
 <% end %>
 
 
