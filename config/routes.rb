@@ -26,6 +26,9 @@ Rails.application.routes.draw do
   get 'root', to: 'images#index'
   get '/', to: 'images#index'
 
+  # ugly hack to make certain tests work...
+  get 's3images/medium/missing.png', to: 'images#index'
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
