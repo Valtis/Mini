@@ -1,5 +1,7 @@
 # Mini
 
+A course project for Helsinki University Ruby on Rails -course.   https://github.com/mluukkai/WebPalvelinohjelmointi2015/wiki/projekti  
+
 Tarkemmat selitykset wikissä
   
 Heroku: https://sheltered-journey-9941.herokuapp.com/users
