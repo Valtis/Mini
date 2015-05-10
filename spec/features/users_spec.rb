@@ -7,12 +7,12 @@ describe 'User' do
   end
   describe 'who has registered' do
     it 'can log in' do
-      perform_login('TestUser', 'TestPassword1')
+      perform_login(@user.username, 'TestPassword1')
       expect(page).to have_content 'Welcome back TestUser!'
     end
 
     it 'is redirected to user page' do
-      perform_login('TestUser', 'TestPassword1')
+      perform_login(@user.username, 'TestPassword1')
       expect(current_path).to eq(user_path(@user))
     end
   end
@@ -42,7 +42,7 @@ describe 'User' do
     end
 
     it 'can log out and is redirected to root' do
-      perform_login('TestUser', 'TestPassword1')
+      perform_login(@user.username, 'TestPassword1')
       expect(page).not_to have_content('Log in')
       expect(page).to have_content('Log out')
 
@@ -51,7 +51,16 @@ describe 'User' do
       expect(current_path).to eq(root_path)
       expect(page).to have_content('Log in')
       expect(page).not_to have_content('Log out')
+    end
 
+    it 'is logged out when banned and loading page next time' do
+      perform_login(@user.username, 'TestPassword1')
+      @user.role = User::Role::BANNED
+      @user.save
+      visit images_path
+      expect(page).to have_content('Log in')
+      expect(page).to have_content('Register')
+      expect(page).not_to have_link("#{@user.username}", user_path(@user.username))
     end
   end
 
@@ -63,7 +72,7 @@ describe 'User' do
   end
 
   it 'is redirected back to log in page if password is wrong' do
-    perform_login('TestUser', 'TestPasswrd1')
+    perform_login(@user.username, 'TestPasswrd1')
     expect(page).to have_content 'Invalid username or password'
     expect(current_path).to eq(new_sessions_path)
   end
