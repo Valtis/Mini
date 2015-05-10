@@ -8,3 +8,4 @@
 18.4 Testejä, ulkonäköä. N 2h
 8.5 Profiilisivulle testit, profiilisivun ulkoasun pienoista parantelemista. N. 2.5h
 9.5 Testit albumeille ja kuvasivulle. Hienoista ulkoasun parantelua. Vihdoin ja viimein testikattavuus githubiin. N. 3.5h
+10.5 Viimeistelyä, wiki. N 1h

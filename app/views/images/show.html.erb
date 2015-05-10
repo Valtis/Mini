@@ -32,36 +32,38 @@
 
 <% end %>
 
-
-
+<p>
 <% if image_owner_or_moderator?(@image) %>
     <%= link_to 'Delete image', @image, method: :delete, class: 'btn btn-danger', data: { confirm: 'Are you sure?',  } %>
     <br/>
 <% end %>
+</p>
 
-
-<%= link_to "#{image_tag @image.S3Image.url(:medium)}".html_safe, @image.S3Image.url(:original) %>
-
-
+<div class="row">
+    <div class="col-lg-3 col-sm-4 col-xs-6">
+        <%= link_to "#{image_tag @image.S3Image.url(:medium)}".html_safe, @image.S3Image.url(:original), class: 'img-responsive thumbnail pull-left'  %>
+    </div>
+</div>
 <% if current_user %>
+    <p>
     <%= form_for(@comment, method: 'post') do |f| %>
         <%= f.text_area :text, size:'40x10' %>
         <%= f.hidden_field :image_id %>
         <br/>
         <%= f.submit %>
     <% end %>
+    </p>
 <% end %>
 
 
 <% @image.comments.each do |comment| %>
-    <section>
+    <p>
         <p>Comment by <%= link_to "#{comment.user.username}", comment.user %><p/>
         <p><%= comment.text %></p>
         <% if comment_owner_or_moderator?(comment) %>
             <%= link_to 'Delete comment', comment, class: 'btn btn-danger', method: :delete, data: { confirm: 'Are you sure' } %>
         <% end %>
-    </section>
-    <br/>
+    </p>
 <% end %>
 
 
